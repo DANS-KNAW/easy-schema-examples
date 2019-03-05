@@ -19,7 +19,12 @@ import scala.util.Success
 
 class AbrTypeSpec extends SchemaValidationFixture {
 
+  override val schemaFile: String = masterXsd("md/ddm", "ddm.xsd")
+
   "example1" should "be schema valid" in {
     val xml = loadExampleXml("abr-type/example1.xml")
+    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    locationsIn(xml) should contain(lastLocalXsd("vocab", "abr-type.xsd").relativeToDistDir)
+    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }

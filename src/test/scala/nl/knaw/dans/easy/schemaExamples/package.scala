@@ -23,13 +23,41 @@ import scala.xml.{ Elem, SAXParseException, XML }
 package object schemaExamples {
 
   val distDir = File("src/main/assembly/dist")
+  val schemaDir = File("target/easy-schema")
+
+  def lastLocalXsd(dir: String, file: String): String = {
+    // this way digits sort after letters
+    (schemaDir / dir)
+      .walk()
+      .map(_.toString())
+      .filter(_.matches(".*/[0-9/]{5,}+" + file)) // end with: /YYYY/xxx or /YYYY/MM/xxx
+      .maxBy(_.toUpperCase.map(c => digitsToLowerCase(c)))
+  }
+  
+  def masterXsd(dir: String, file: String): String = {
+    (schemaDir / dir / file).toString()
+  }
+
+  private def digitsToLowerCase(c: Char): Char = {
+    if (c.isDigit) ('a' + c).toChar
+    else c
+  }
 
   def loadExampleXml(example: String): Elem = {
-    XML.loadFile((distDir / "docs/examples/" / example).toString())
+    XML.loadFile((distDir / "examples" / example).toString())
+  }
+
+  def locationsIn(xml: Elem): Seq[String] = {
+    Seq(
+      "xsi:schemaLocation",
+      "xsi:noNamespaceSchemaLocation"
+    ).flatMap(xml.attributes.asAttrMap.getOrElse(_, "").split(" +"))
+      .filter(_.endsWith(".xsd"))
+      .map(_.replace("https://easy.dans.knaw.nl/schemas", ""))
   }
 
   implicit class StringExtensions[T](val s: String) extends AnyVal {
-    def relativeToDistDir: String = s.replace(distDir.path.toAbsolutePath.toString, "")
+    def relativeToDistDir: String = s.replace(schemaDir.path.toAbsolutePath.toString, "")
   }
 
   implicit class TryExtensions[T](val triedT: Try[T]) extends AnyVal {

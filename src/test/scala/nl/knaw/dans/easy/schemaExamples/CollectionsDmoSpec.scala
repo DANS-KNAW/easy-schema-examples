@@ -19,8 +19,11 @@ import scala.util.Success
 
 class CollectionsDmoSpec extends SchemaValidationFixture {
 
+  override val schemaFile: String = (distDir / "collections/dmo-collection.xsd").toString()
 
   "validator" should "succeed" in {
     val xml = loadExampleXml("collections/dmo/example1.xml")
+    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }

@@ -19,11 +19,17 @@ import scala.util.Success
 
 class DdmSpec extends SchemaValidationFixture {
 
+  override val schemaFile: String = masterXsd("md/ddm", "ddm.xsd")
+
   "example1" should "be schema valid" in {
     val xml = loadExampleXml("ddm/example1.xml")
+    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 
   "example2" should "be schema valid" in {
     val xml = loadExampleXml("ddm/example2.xml")
+    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }

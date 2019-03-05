@@ -29,5 +29,25 @@ import scala.xml.{ Elem, SAXParseException }
 
 trait SchemaValidationFixture extends FlatSpec with Matchers {
 
+  val schemaFile: String
+  private lazy val triedSchema: Try[Schema] = Try {
+    // lazy for two reasons:
+    // - schemaFile is set by concrete class
+    // - postpone loading until actually validating
+    SchemaFactory
+      .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+      .newSchema(Array(new StreamSource(schemaFile)).toArray[Source])
+  }
 
+  def validate(elem: Elem): Try[Unit] = {
+    assume(triedSchema match {
+      case Failure(e: SAXParseException) if e.getCause != null && e.getCause.isInstanceOf[UnknownHostException] => false
+      case Failure(e: SAXParseException) if e.getMessage.contains("Cannot resolve") =>
+        println("Probably an offline third party schema: " + e.getMessage)
+        false
+      case _ => true
+    })
+    val source = new StreamSource(elem.toString().inputStream)
+    triedSchema.map(_.newValidator().validate(source))
+  }
 }
