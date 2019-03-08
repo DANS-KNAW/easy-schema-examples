@@ -23,8 +23,8 @@ class DcxGmlSpec extends SchemaValidationFixture {
 
   "example1" should "be schema valid" in {
     val xml = loadExampleXml("dcx-gml/example1.xml")
-    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
-    locationsIn(xml) should contain(lastLocalXsd("dcx", "dcx-gml.xsd").relativeToDistDir)
+    // TODO locationsIn(xml).foreach{ s => (schemaDir / s.tail).toJava should exist }
+    // TODO locationsIn(xml) should contain(lastLocalXsd("dcx", "dcx-gml.xsd").relativeToDistDir)
     validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }

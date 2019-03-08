@@ -32,7 +32,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers {
   val schemaFile: String
   private lazy val triedSchema: Try[Schema] = Try {
     // lazy for two reasons:
-    // - schemaFile is set by concrete class
+    // - schemaFile is set by concrete test class
     // - postpone loading until actually validating
     SchemaFactory
       .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)

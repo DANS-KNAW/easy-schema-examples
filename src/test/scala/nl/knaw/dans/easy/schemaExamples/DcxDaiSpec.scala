@@ -21,15 +21,9 @@ class DcxDaiSpec extends SchemaValidationFixture {
 
   override val schemaFile: String = masterXsd("md/ddm", "ddm.xsd")
 
-  "example1" should "be schema valid" in {
-    val xml = loadExampleXml("dcx-dai/example1.xml")
-    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
-    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
-  }
-
-  "example2" should "be schema valid" in {
+  "example2" should "be schema valid" in pendingUntilFixed {
     val xml = loadExampleXml("dcx-dai/example2.xml")
-    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    // TODO locationsIn(xml).foreach{ s => (schemaDir / s.tail).toJava should exist }
     validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }

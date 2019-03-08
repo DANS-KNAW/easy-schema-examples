@@ -21,36 +21,36 @@ import org.scalatest.{ FlatSpec, Matchers }
 class DefaultsSpec extends FlatSpec with Matchers {
   "last local XSD" should "equal unqualified ddm.xsd" in {
     File(lastLocalXsd("md", "ddm.xsd"))
-      .contentAsString shouldBe (distDir / "md/ddm/ddm.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
   }
   it should "equal unqualified emd.xsd" in pendingUntilFixed {
     // TODO exclude version numbers in schema locations of imported XSD-s
     File(lastLocalXsd("md/emd", "emd.xsd"))
-      .contentAsString shouldBe (distDir / "md/emd/emd.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/emd/emd.xsd").contentAsString
   }
   it should "equal unqualified eas.xsd" in {
     File(lastLocalXsd("md/emd", "eas.xsd"))
-      .contentAsString shouldBe (distDir / "md/emd/eas.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/emd/eas.xsd").contentAsString
   }
   it should "equal unqualified qdc.xsd" in pendingUntilFixed {
     File(lastLocalXsd("md/emd", "qdc.xsd"))
-      .contentAsString shouldBe (distDir / "md/emd/qdc.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/emd/qdc.xsd").contentAsString
   }
   it should "equal unqualified sdc.xsd" in pendingUntilFixed {
     File(lastLocalXsd("md/emd", "sdc.xsd"))
-      .contentAsString shouldBe (distDir / "md/emd/sdc.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/emd/sdc.xsd").contentAsString
   }
   it should "equal unqualified xml.xsd" in pendingUntilFixed {
     // TODO fix copyrights annotation
     File(lastLocalXsd("md/emd", "xml.xsd"))
-      .contentAsString shouldBe (distDir / "md/emd/xml.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "md/emd/xml.xsd").contentAsString
   }
   it should "equal unqualified bag/files.xsd" in {
     File(lastLocalXsd("bag/metadata/files", "files.xsd"))
-      .contentAsString shouldBe (distDir / "bag/metadata/files/files.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "bag/metadata/files/files.xsd").contentAsString
   }
   it should "equal unqualified bag/metadata/agreements.xsd" in {
     File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
-      .contentAsString shouldBe (distDir / "bag/metadata/agreements/agreements.xsd").contentAsString
+      .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
   }
 }

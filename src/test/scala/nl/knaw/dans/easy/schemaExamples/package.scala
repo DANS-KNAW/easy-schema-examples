@@ -33,7 +33,7 @@ package object schemaExamples {
       .filter(_.matches(".*/[0-9/]{5,}+" + file)) // end with: /YYYY/xxx or /YYYY/MM/xxx
       .maxBy(_.toUpperCase.map(c => digitsToLowerCase(c)))
   }
-  
+
   def masterXsd(dir: String, file: String): String = {
     (schemaDir / dir / file).toString()
   }
@@ -63,20 +63,31 @@ package object schemaExamples {
   implicit class TryExtensions[T](val triedT: Try[T]) extends AnyVal {
 
     /**
-     * Print the XML line that breaks the test.
+     * Print the breaking XML with a pointer and the error message right after the failing line.
      *
-     * The line numbers don't match the source because
-     * xml.toString joins attributes on a single line and
-     * reduces the number of comment lines.
+     * The original input is of little use because the line numbers of the error messages don't match:
+     * attributes are joined on a single line and the number of comment lines are reduced.
+     *
+     * Note you that might first get the XML of *multiple* broken tests
+     * and only then the stack traces of these broken tests.
+     * PendingUntilFixed test might only print the first breaking XML.
+     *
      */
     def printBreakingLine(xml: Elem): Try[T] = {
       triedT match {
         case Failure(e: SAXParseException) =>
-          Try(xml.toString.split("\n")(e.getLineNumber - 1))
-            .foreach(println)
+          val lines = xml.toString.split("\n")
+          val lineNumber = e.getLineNumber
+          printNonEmpty(lines.slice(0, lineNumber))
+          println("-" * e.getColumnNumber + "^  " + e.getMessage)
+          printNonEmpty(lines.slice(lineNumber + 1, Int.MaxValue))
           Failure(e)
         case x => x
       }
+    }
+
+    def printNonEmpty(lines: Seq[String]): Unit = {
+      lines.withFilter(_.trim.nonEmpty).foreach(println)
     }
   }
 }

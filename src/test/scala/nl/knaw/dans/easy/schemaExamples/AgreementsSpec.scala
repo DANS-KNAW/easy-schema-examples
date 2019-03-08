@@ -23,7 +23,7 @@ class AgreementsSpec extends SchemaValidationFixture {
 
   "validator" should "succeed" in {
     val xml = loadExampleXml("bag/agreements/example1.xml")
-    locationsIn(xml) should contain(schemaFile.relativeToDistDir)
+    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
     validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
   }
 }
