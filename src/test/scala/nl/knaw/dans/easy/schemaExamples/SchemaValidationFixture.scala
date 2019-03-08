@@ -47,7 +47,25 @@ trait SchemaValidationFixture extends FlatSpec with Matchers {
         false
       case _ => true
     })
-    val source = new StreamSource(elem.toString().inputStream)
-    triedSchema.map(_.newValidator().validate(source))
+    val xmlString = elem
+      .toString() // schema location attribute becomes a standardized one liner
+      .replaceAll(
+      " https://easy.dans.knaw.nl/schemas", // public xsd location
+      s" file://$schemaDir" // local xsd location
+    )
+    triedSchema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream))) match {
+      case Failure(e: SAXParseException) =>
+        val lines = xmlString.split("\n")
+        val lineNumber = e.getLineNumber
+        printNonEmpty(lines.slice(0, lineNumber))
+        println("-" * e.getColumnNumber + "^  " + e.getMessage)
+        printNonEmpty(lines.slice(lineNumber + 1, Int.MaxValue))
+        Failure(e)
+      case x => x
+    }
+  }
+
+  private def printNonEmpty(lines: Seq[String]): Unit = {
+    lines.withFilter(_.trim.nonEmpty).foreach(println)
   }
 }

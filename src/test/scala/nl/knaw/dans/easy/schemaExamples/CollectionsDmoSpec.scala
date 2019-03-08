@@ -24,6 +24,6 @@ class CollectionsDmoSpec extends SchemaValidationFixture {
   "validator" should "succeed" in {
     val xml = loadExampleXml("collections/dmo/example1.xml")
     locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
+    validate(xml) shouldBe a[Success[_]]
   }
 }

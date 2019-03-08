@@ -59,35 +59,4 @@ package object schemaExamples {
   implicit class StringExtensions[T](val s: String) extends AnyVal {
     def relativeToDistDir: String = s.replace(schemaDir.path.toAbsolutePath.toString, "")
   }
-
-  implicit class TryExtensions[T](val triedT: Try[T]) extends AnyVal {
-
-    /**
-     * Print the breaking XML with a pointer and the error message right after the failing line.
-     *
-     * The original input is of little use because the line numbers of the error messages don't match:
-     * attributes are joined on a single line and the number of comment lines are reduced.
-     *
-     * Note you that might first get the XML of *multiple* broken tests
-     * and only then the stack traces of these broken tests.
-     * PendingUntilFixed test might only print the first breaking XML.
-     *
-     */
-    def printBreakingLine(xml: Elem): Try[T] = {
-      triedT match {
-        case Failure(e: SAXParseException) =>
-          val lines = xml.toString.split("\n")
-          val lineNumber = e.getLineNumber
-          printNonEmpty(lines.slice(0, lineNumber))
-          println("-" * e.getColumnNumber + "^  " + e.getMessage)
-          printNonEmpty(lines.slice(lineNumber + 1, Int.MaxValue))
-          Failure(e)
-        case x => x
-      }
-    }
-
-    def printNonEmpty(lines: Seq[String]): Unit = {
-      lines.withFilter(_.trim.nonEmpty).foreach(println)
-    }
-  }
 }

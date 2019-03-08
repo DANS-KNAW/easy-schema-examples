@@ -24,6 +24,6 @@ class DcxDaiSpec extends SchemaValidationFixture {
   "example2" should "be schema valid" in pendingUntilFixed {
     val xml = loadExampleXml("dcx-dai/example2.xml")
     // TODO locationsIn(xml).foreach{ s => (schemaDir / s.tail).toJava should exist }
-    validate(xml).printBreakingLine(xml) shouldBe a[Success[_]]
+    validate(xml) shouldBe a[Success[_]]
   }
 }
