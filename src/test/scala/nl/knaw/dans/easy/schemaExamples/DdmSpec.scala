@@ -19,7 +19,26 @@ import scala.util.Success
 
 class DdmSpec extends SchemaValidationFixture {
 
-  override val schemaFile: String = masterXsd("md/ddm", "ddm.xsd")
+  override val schemaFile: String = lastLocalXsd("md", "ddm.xsd")
+
+  "abr-type/example1" should "be schema valid" in {
+    val xml = loadExampleXml("abr-type/example1.xml")
+    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
+    // TODO locationsIn(xml) should contain(lastLocalXsd("vocab", "abr-type.xsd").relativeToDistDir)
+    validate(xml) shouldBe a[Success[_]]
+  }
+
+  "dcx-dai/example2" should "be schema valid" in pendingUntilFixed {
+    val xml = loadExampleXml("dcx-dai/example2.xml")
+    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
+    validate(xml) shouldBe a[Success[_]]
+  }
+
+  "dcx-gml/example1" should "be schema valid" in {
+    val xml = loadExampleXml("dcx-gml/example1.xml")
+    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
+    validate(xml) shouldBe a[Success[_]]
+  }
 
   "dcx-dai/example1" should "be schema valid" in pendingUntilFixed {
     val xml = loadExampleXml("dcx-dai/example1.xml")
