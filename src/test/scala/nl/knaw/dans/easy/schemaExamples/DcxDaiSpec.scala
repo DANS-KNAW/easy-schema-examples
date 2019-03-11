@@ -19,7 +19,7 @@ import org.scalatest.prop.TableFor1
 
 class DcxDaiSpec extends SchemaValidationFixture {
 
-  override val schemaFile: String = (schemaDir / "dcx/2019/01/dcx-dai.xsd").toString()
+  override val localSchemaFile: String = lastLocalXsd("dcx","dcx-dai.xsd")
   override val examples: TableFor1[String] = Table(
     "example",
     "dcx-dai/example2.xml",
