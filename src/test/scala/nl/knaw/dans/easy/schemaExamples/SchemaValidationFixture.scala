@@ -49,7 +49,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
       .newSchema(Array(new StreamSource(xsdInputStream)).toArray[Source])
   }
 
-  "examples" should "be schema valid" in {
+  "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
       val xml = XML.loadFile((exampleDir / example).toString())
       easyLocationsIn(xml).foreach(File(_).toJava should exist)

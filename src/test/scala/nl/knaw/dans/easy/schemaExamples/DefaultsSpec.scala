@@ -16,40 +16,33 @@
 package nl.knaw.dans.easy.schemaExamples
 
 import better.files.File
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.{ FlatSpec, Matchers }
 
-class DefaultsSpec extends FlatSpec with Matchers {
-  "last local XSD" should "equal unqualified ddm.xsd" in {
+class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks{
+  "last local XSD" should "equal unqualified xsd" in {
+    val xsds = Table (
+      ("path", "file"),
+      ("md/emd", "emd.xsd"),
+      ("md/emd", "eas.xsd"),
+      ("md/emd", "qdc.xsd"),
+      ("md/emd", "sdc.xsd"),
+      ("md/emd", "xml.xsd"),
+      ("bag/metadata/files", "files.xsd"),
+    )
+    forEvery(xsds) { (path, file) =>
+      File(lastLocalXsd(path, file))
+        .contentAsString shouldBe (schemaDir / path / file).contentAsString
+    }
+  }
+
+  it should "equal unqualified ddm.xsd" in {
+    // different path for version and version-less
     File(lastLocalXsd("md", "ddm.xsd"))
       .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
   }
-  it should "equal unqualified emd.xsd" in {
-    // TODO exclude version numbers in schema locations of imported XSD-s
-    File(lastLocalXsd("md/emd", "emd.xsd"))
-      .contentAsString shouldBe (schemaDir / "md/emd/emd.xsd").contentAsString
-  }
-  it should "equal unqualified eas.xsd" in {
-    File(lastLocalXsd("md/emd", "eas.xsd"))
-      .contentAsString shouldBe (schemaDir / "md/emd/eas.xsd").contentAsString
-  }
-  it should "equal unqualified qdc.xsd" in {
-    File(lastLocalXsd("md/emd", "qdc.xsd"))
-      .contentAsString shouldBe (schemaDir / "md/emd/qdc.xsd").contentAsString
-  }
-  it should "equal unqualified sdc.xsd" in {
-    File(lastLocalXsd("md/emd", "sdc.xsd"))
-      .contentAsString shouldBe (schemaDir / "md/emd/sdc.xsd").contentAsString
-  }
-  it should "equal unqualified xml.xsd" in {
-    File(lastLocalXsd("md/emd", "xml.xsd"))
-      .contentAsString shouldBe (schemaDir / "md/emd/xml.xsd").contentAsString
-  }
-  it should "equal unqualified bag/files.xsd" in {
-    File(lastLocalXsd("bag/metadata/files", "files.xsd"))
-      .contentAsString shouldBe (schemaDir / "bag/metadata/files/files.xsd").contentAsString
-  }
-  it should "equal unqualified bag/metadata/agreements.xsd" in pendingUntilFixed {
-    // TODO ignore or fix white space differences
+  it should "equal unqualified agreements.xsd" in pendingUntilFixed {
+    // TODO ignore or fix white space differences; then move to table driven test
     File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
       .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
   }
