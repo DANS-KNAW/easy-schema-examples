@@ -15,46 +15,17 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import scala.util.Success
+import org.scalatest.prop.TableFor1
 
 class DdmSpec extends SchemaValidationFixture {
 
   override val schemaFile: String = lastLocalXsd("md", "ddm.xsd")
-
-  "abr-type/example1" should "be schema valid" in {
-    val xml = loadExampleXml("abr-type/example1.xml")
-    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    // TODO locationsIn(xml) should contain(lastLocalXsd("vocab", "abr-type.xsd").relativeToDistDir)
-    validate(xml) shouldBe a[Success[_]]
-  }
-
-  "dcx-dai/example2" should "be schema valid" in pendingUntilFixed {
-    val xml = loadExampleXml("dcx-dai/example2.xml")
-    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    validate(xml) shouldBe a[Success[_]]
-  }
-
-  "dcx-gml/example1" should "be schema valid" in {
-    val xml = loadExampleXml("dcx-gml/example1.xml")
-    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    validate(xml) shouldBe a[Success[_]]
-  }
-
-  "dcx-dai/example1" should "be schema valid" in pendingUntilFixed {
-    val xml = loadExampleXml("dcx-dai/example1.xml")
-    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    validate(xml) shouldBe a[Success[_]]
-  }
-
-  "example1" should "be schema valid" in {
-    val xml = loadExampleXml("ddm/example1.xml")
-    locationsIn(xml).foreach { s => (schemaDir / s.tail).toJava should exist }
-    validate(xml) shouldBe a[Success[_]]
-  }
-
-  "example2" should "be schema valid" in {
-    val xml = loadExampleXml("ddm/example2.xml")
-    // TODO locationsIn(xml).foreach{ s => (schemaDir / s.tail).toJava should exist }
-    validate(xml) shouldBe a[Success[_]]
-  }
+  override val examples: TableFor1[String] = Table(
+    "example",
+    "dcx-dai/example1.xml",
+    "dcx-gml/example1.xml",
+    "ddm/example1.xml",
+    "ddm/example2.xml",
+    "abr-type/example1.xml",
+  )
 }

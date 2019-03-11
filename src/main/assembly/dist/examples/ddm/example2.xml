@@ -27,13 +27,10 @@
         xmlns:dct="http://purl.org/dc/terms/"
         xmlns:dcterms="http://purl.org/dc/terms/"
 
-        xsi:schemaLocation="http://easy.dans.knaw.nl/schemas/dcx/dai/ https://easy.dans.knaw.nl/schemas/dcx/dcx-dai.xsd
-		 http://easy.dans.knaw.nl/schemas/dcx/gml/ https://easy.dans.knaw.nl/schemas/dcx/dcx-gml.xsd
-		 http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
-		 http://easy.dans.knaw.nl/schemas/vocab/narcis-type/ https://easy.dans.knaw.nl/schemas/vocab/narcis-type.xsd
-		 http://www.den.nl/standaard/166/Archeologisch-Basisregister/ https://easy.dans.knaw.nl/schemas/vocab/abr-type.xsd
-		 http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/dcterms.xsd
-		 http://purl.org/dc/elements/1.1/ http://dublincore.org/schemas/xmls/qdc/dc.xsd">
+        xsi:schemaLocation="
+            http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
+            http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd
+        ">
 
     <!-- If you view this example in a browser, click 'page source' to see the namespace declarations. -->
 

@@ -17,11 +17,11 @@ package nl.knaw.dans.easy.schemaExamples
 
 import org.scalatest.prop.TableFor1
 
-class AgreementsSpec extends SchemaValidationFixture {
+class DcxDaiSpec extends SchemaValidationFixture {
 
-  override val schemaFile: String = lastLocalXsd("bag/metadata/agreements", "agreements.xsd")
+  override val schemaFile: String = (schemaDir / "dcx/2019/01/dcx-dai.xsd").toString()
   override val examples: TableFor1[String] = Table(
     "example",
-    "bag/agreements/example1.xml",
+    "dcx-dai/example2.xml",
   )
 }

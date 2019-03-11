@@ -22,14 +22,16 @@ import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{ Schema, SchemaFactory }
+import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
-import scala.util.{ Failure, Try }
+import scala.util.{ Failure, Success, Try }
 import scala.xml.{ Elem, SAXParseException, XML }
 
-trait SchemaValidationFixture extends FlatSpec with Matchers {
+trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
 
   val schemaFile: String
+  val examples: TableFor1[String]
 
   private val publicEasySchema = """//easy.dans.knaw.nl/schemas"""
   private val httpsEasySchema = s"https:$publicEasySchema"
@@ -47,9 +49,16 @@ trait SchemaValidationFixture extends FlatSpec with Matchers {
       .newSchema(Array(new StreamSource(xsdInputStream)).toArray[Source])
   }
 
-  def validate(xml: Elem): Try[Unit] = {
-    assume(schemasAreOnline)
-    val xmlString = toLocalSchemas(xml)
+  "examples" should "be schema valid" in {
+    forEvery(examples) { example =>
+      val xml = XML.loadFile((exampleDir / example).toString())
+      easyLocationsIn(xml).foreach(File(_).toJava should exist)
+      assume(schemaIsOnline)
+      validate(toLocalSchemas(xml)) shouldBe a[Success[_]]
+    }
+  }
+
+  private def validate(xmlString: String): Try[Unit] = {
     triedSchema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream))) match {
       case Failure(e: SAXParseException) =>
         showErrorWithSourceContext(xmlString, e)
@@ -58,20 +67,16 @@ trait SchemaValidationFixture extends FlatSpec with Matchers {
     }
   }
 
-  def loadExampleXml(example: String): Elem = {
-    XML.loadFile((exampleDir / example).toString())
-  }
-
-  def locationsIn(xml: Elem): Seq[String] = {
+  private def easyLocationsIn(xml: Elem): Seq[String] = {
     Seq(
       "xsi:schemaLocation",
       "xsi:noNamespaceSchemaLocation"
     ).flatMap(xml.attributes.asAttrMap.getOrElse(_, "").split(" +"))
-      .filter(_.endsWith(".xsd"))
-      .map(_.replace(httpsEasySchema, ""))
+      .filter(str => str.endsWith(".xsd") && str.contains("easy.dans"))
+      .map(s => s.replace(httpsEasySchema, schemaDir.toString()))
   }
 
-  private def schemasAreOnline = {
+  private def schemaIsOnline = {
     triedSchema match {
       case Failure(e: SAXParseException) if e.getCause != null && e.getCause.isInstanceOf[UnknownHostException] => false
       case Failure(e: SAXParseException) if e.getMessage.contains("Cannot resolve") =>
