@@ -30,18 +30,18 @@ import scala.xml.{ Elem, SAXParseException, XML }
 
 trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
 
-  val schemaFile: String
+  val localSchemaFile: String
   val examples: TableFor1[String]
 
-  private val publicEasySchema = """//easy.dans.knaw.nl/schemas"""
-  private val httpsEasySchema = s"https:$publicEasySchema"
+  private val publicEasySchemaBase = "//easy.dans.knaw.nl/schemas"
+  private val httpsEasySchemaBase = s"https:$publicEasySchemaBase"
 
-  private lazy val triedSchema: Try[Schema] = Try {
+  private lazy val triedLocalSchema: Try[Schema] = Try {
     // lazy for two reasons:
     // - schemaFile is set by concrete test class
     // - postpone loading until actually validating
-    val xsdInputStream = File(schemaFile).contentAsString.replaceAll(
-      s"""schemaLocation="http:$publicEasySchema""",
+    val xsdInputStream = File(localSchemaFile).contentAsString.replaceAll(
+      s"""schemaLocation="http:$publicEasySchemaBase""",
       s"""schemaLocation="file://$schemaDir"""
     ).inputStream
     SchemaFactory
@@ -59,7 +59,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   }
 
   private def validate(xmlString: String): Try[Unit] = {
-    triedSchema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream))) match {
+    triedLocalSchema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream))) match {
       case Failure(e: SAXParseException) =>
         showErrorWithSourceContext(xmlString, e)
         Failure(e)
@@ -73,11 +73,11 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
       "xsi:noNamespaceSchemaLocation"
     ).flatMap(xml.attributes.asAttrMap.getOrElse(_, "").split(" +"))
       .filter(str => str.endsWith(".xsd") && str.contains("easy.dans"))
-      .map(s => s.replace(httpsEasySchema, schemaDir.toString()))
+      .map(s => s.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
   private def schemaIsOnline = {
-    triedSchema match {
+    triedLocalSchema match {
       case Failure(e: SAXParseException) if e.getCause != null && e.getCause.isInstanceOf[UnknownHostException] => false
       case Failure(e: SAXParseException) if e.getMessage.contains("Cannot resolve") =>
         println("Probably an offline third party schema: " + e.getMessage)
@@ -102,7 +102,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     xml
       .toString() // schema location attribute becomes a standardized one liner
       .replaceAll( // a leading space is supposed to be the location
-      s" $httpsEasySchema", // replace public xsd location
+      s" $httpsEasySchemaBase", // replace public xsd location
       s" file://$schemaDir" // with local xsd location
     )
   }

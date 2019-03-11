@@ -19,7 +19,7 @@ import org.scalatest.prop.TableFor1
 
 class CollectionsDmoSpec extends SchemaValidationFixture {
 
-  override val schemaFile: String = (schemaDir / "collections/dmo-collection.xsd").toString()
+  override val localSchemaFile: String = (schemaDir / "collections/dmo-collection.xsd").toString()
   override val examples: TableFor1[String] = Table(
     "example",
     "collections/dmo/example1.xml",
