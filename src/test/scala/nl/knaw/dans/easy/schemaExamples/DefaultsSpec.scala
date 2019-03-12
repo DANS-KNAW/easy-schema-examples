@@ -19,9 +19,9 @@ import better.files.File
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.{ FlatSpec, Matchers }
 
-class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks{
-  "last local XSD" should "equal unqualified xsd" in {
-    val xsds = Table (
+class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks {
+  "last local XSD" should "equal not qualified XSD" in {
+    val xsds = Table(
       ("path", "file"),
       ("md/emd", "emd.xsd"),
       ("md/emd", "eas.xsd"),
@@ -36,14 +36,14 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     }
   }
 
-  it should "equal unqualified ddm.xsd" in {
+  it should "equal not qualified ddm.xsd" in {
     // an exception to the table driven tests:
     // different path for version and version-less
     File(lastLocalXsd("md", "ddm.xsd"))
       .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
   }
 
-  it should "equal unqualified agreements.xsd" in pendingUntilFixed {
+  it should "equal not qualified agreements.xsd" in pendingUntilFixed {
     // TODO ignore or fix white space differences; then move to table driven test
     File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
       .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
