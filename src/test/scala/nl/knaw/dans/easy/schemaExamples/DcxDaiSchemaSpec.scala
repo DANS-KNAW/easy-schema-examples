@@ -17,12 +17,16 @@ package nl.knaw.dans.easy.schemaExamples
 
 import org.scalatest.prop.TableFor1
 
-class FilesSpec extends SchemaValidationFixture {
+class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
-  override val publicSchema: String = s"$httpsEasySchemaBase/bag/metadata/files/files.xsd"
-  override val localSchemaFile: String = lastLocalXsd("bag/metadata/files", "files.xsd")
+  override val publicSchema: String = s"$httpsEasySchemaBase/dcx/2019/01/dcx-dai.xsd"
+  override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
   override val examples: TableFor1[String] = Table(
     "example",
-    "bag/files/example1.xml",
+    "dcx-dai/example2.xml",
   )
+
+  "publicSchema" should "have the same date qualifier as localSchemaFile" in {
+    publicSchema.replace(httpsEasySchemaBase, "") shouldBe localSchemaFile.replace(schemaDir.toString(), "")
+  }
 }

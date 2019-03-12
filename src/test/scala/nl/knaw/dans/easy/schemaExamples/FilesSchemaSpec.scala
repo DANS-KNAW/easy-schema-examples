@@ -17,12 +17,12 @@ package nl.knaw.dans.easy.schemaExamples
 
 import org.scalatest.prop.TableFor1
 
-class CollectionsDmoSpec extends SchemaValidationFixture {
+class FilesSchemaSpec extends SchemaValidationFixture {
 
-  override val publicSchema: String = s"$httpsEasySchemaBase/collections/dmo-collection.xsd"
-  override val localSchemaFile: String = (schemaDir / "collections/dmo-collection.xsd").toString()
+  override val publicSchema: String = s"$httpsEasySchemaBase/bag/metadata/files/files.xsd"
+  override val localSchemaFile: String = lastLocalXsd("bag/metadata/files", "files.xsd")
   override val examples: TableFor1[String] = Table(
     "example",
-    "collections/dmo/example1.xml",
+    "bag/files/example1.xml",
   )
 }

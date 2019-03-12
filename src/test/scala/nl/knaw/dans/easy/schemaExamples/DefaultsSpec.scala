@@ -48,4 +48,21 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
       .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
   }
+
+  "SchemaSpec classes" should "test all examples" in {
+    exampleDir
+      .walk()
+      .count(!_.isDirectory) shouldBe
+    File("src/test/scala/nl/knaw/dans/easy/schemaExamples")
+      .walk()
+      .filter(_.toString().endsWith("SchemaSpec.scala"))
+      .map(countTestedFiles)
+      .sum
+  }
+
+  private def countTestedFiles(file: File) = {
+    file.
+      contentAsString.split("\n")
+      .count(_.contains(""".xml","""))
+  }
 }
