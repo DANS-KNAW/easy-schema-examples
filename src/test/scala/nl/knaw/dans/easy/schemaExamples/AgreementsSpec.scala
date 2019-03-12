@@ -19,6 +19,7 @@ import org.scalatest.prop.TableFor1
 
 class AgreementsSpec extends SchemaValidationFixture {
 
+  override val publicSchema: String = s"$httpsEasySchemaBase/bag/metadata/agreements/agreements.xsd"
   override val localSchemaFile: String = lastLocalXsd("bag/metadata/agreements", "agreements.xsd")
   override val examples: TableFor1[String] = Table(
     "example",

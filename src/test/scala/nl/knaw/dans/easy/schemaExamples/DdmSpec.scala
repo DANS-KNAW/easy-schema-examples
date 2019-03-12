@@ -19,6 +19,7 @@ import org.scalatest.prop.TableFor1
 
 class DdmSpec extends SchemaValidationFixture {
 
+  override val publicSchema: String = s"$httpsEasySchemaBase/md/ddm/ddm.xsd"
   override val localSchemaFile: String = lastLocalXsd("md", "ddm.xsd")
   override val examples: TableFor1[String] = Table(
     "example",
