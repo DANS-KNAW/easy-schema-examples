@@ -27,7 +27,7 @@ package object schemaExamples {
       .walk()
       .map(_.toString())
       .filter(_.matches(".*/[0-9/]{5,}+" + file)) // end with: /YYYY/xxx or /YYYY/MM/xxx
-      .maxBy(_.toUpperCase.map(c => digitsToLowerCase(c))) // digits sort after letters
+      .maxBy(_.toUpperCase.map(digitsToLowerCase)) // digits sort after letters
   }
 
   private def digitsToLowerCase(c: Char): Char = {

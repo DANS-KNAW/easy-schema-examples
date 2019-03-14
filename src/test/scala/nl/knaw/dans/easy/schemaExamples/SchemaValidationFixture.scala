@@ -100,7 +100,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
       .map(s => s.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
-  private def schemaIsOnline(schema: Try[Schema]) = {
+  private def schemaIsOnline(schema: Try[Schema]): Boolean = {
     // to ignore tests when executed without web-access or when third party schema's are not available
     // reported with: ...triedPublicSchema was false
     schema match {
