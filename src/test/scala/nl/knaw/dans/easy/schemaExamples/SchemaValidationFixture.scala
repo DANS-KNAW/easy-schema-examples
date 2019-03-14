@@ -79,10 +79,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     // and the new schema's are not yet published
     // reported with: ...lastLocalIsPublic was false
     val newPublicSchema = localSchemaFile.replace(schemaDir.toString(), httpsEasySchemaBase)
-    Try(new URL(newPublicSchema).openStream()) match {
-      case Success(_) => true
-      case Failure(_) => false
-    }
+    Try(new URL(newPublicSchema).openStream()).fold(_ => false, _ => true)
   }
 
   private def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
