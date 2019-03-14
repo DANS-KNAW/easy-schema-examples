@@ -53,16 +53,16 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     exampleDir
       .walk()
       .count(!_.isDirectory) shouldBe
-    File("src/test/scala/nl/knaw/dans/easy/schemaExamples")
-      .walk()
-      .filter(_.toString().endsWith("SchemaSpec.scala"))
-      .map(countTestedFiles)
-      .sum
+      File("src/test/scala/nl/knaw/dans/easy/schemaExamples")
+        .walk()
+        .filter(_.toString().endsWith("SchemaSpec.scala"))
+        .map(countTestedFiles)
+        .sum
   }
 
   private def countTestedFiles(file: File) = {
-    file.
-      contentAsString.split("\n")
+    file.contentAsString
+      .split("\n")
       .count(_.contains(""".xml","""))
   }
 }
