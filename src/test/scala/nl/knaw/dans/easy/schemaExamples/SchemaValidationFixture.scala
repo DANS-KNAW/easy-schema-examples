@@ -26,7 +26,7 @@ import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
 import scala.util.{ Failure, Success, Try }
-import scala.xml.{ Elem, SAXParseException, XML }
+import scala.xml._
 
 trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
 
@@ -92,12 +92,19 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   }
 
   private def easyLocationsIn(xml: Elem): Seq[String] = {
-    Seq(
-      "xsi:schemaLocation",
-      "xsi:noNamespaceSchemaLocation"
-    ).flatMap(xml.attributes.asAttrMap.getOrElse(_, "").split(" +"))
-      .filter(str => str.endsWith(".xsd") && str.contains("easy.dans"))
-      .map(s => s.replace(httpsEasySchemaBase, schemaDir.toString()))
+
+    val attributeValues = xml.attributes.asAttrMap.map {
+      case ("xsi:noNamespaceSchemaLocation", value: String) => Some(s"dummyUri $value")
+      case ("xsi:schemaLocation", value: String) => Some(value)
+      case _ => None
+    }.filter(_.isDefined).flatten
+    // now we should have strings formatted like: "nsUri1 xsdUrl1 nsUri2 xsdUrl2"
+    attributeValues
+      .flatMap(_.trim.split(" +").grouped(2).toList)  // extract (uri,url) tuples
+      .map(_.applyOrElse(1, "").toString) // get second element of each tuple
+      .withFilter(_.contains("easy.dans"))
+      .map(_.replace(httpsEasySchemaBase, schemaDir.toString()))
+      .toSeq
   }
 
   private def schemaIsOnline(schema: Try[Schema]): Boolean = {
