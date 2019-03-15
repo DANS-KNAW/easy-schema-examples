@@ -10,7 +10,7 @@ Development cycle
 
 * Add new version of XSD to https://github.com/DANS-KNAW/easy-schema.
 * Run `mvn clean install` in `easy-schema`.
-* Run `mvn clean install -DskipTests=true` in this project.
+* Run `mvn clean install generate-test-resources ` in this project.
 * Update the examples and fix failing tests.
 * Some tests will be ignored with `...lastLocalIsPublic was false` messages.
 * Merge both projects, publish schema's.

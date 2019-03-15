@@ -22,9 +22,11 @@ import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{ Schema, SchemaFactory }
+import nl.knaw.dans.lib.error._
 import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
+import scala.collection.immutable
 import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
@@ -40,7 +42,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   private lazy val triedPublicSchema: Try[Schema] = Try {
     SchemaFactory
       .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-      .newSchema(Array(new StreamSource(publicSchema.toString)).toArray[Source])
+      .newSchema(Array[Source](new StreamSource(publicSchema.toString)))
   }
   private lazy val triedLocalSchema: Try[Schema] = Try {
     // lazy for two reasons:
@@ -52,13 +54,13 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     ).inputStream
     SchemaFactory
       .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-      .newSchema(Array(new StreamSource(xsdInputStream)).toArray[Source])
+      .newSchema(Array[Source](new StreamSource(xsdInputStream)))
   }
 
   "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
       val xml = XML.loadFile((exampleDir / example).toString())
-      easyLocationsIn(xml).foreach(File(_).toJava should exist)
+      easyLocationsIn(xml).foreach(_.toJava should exist)
       assume(schemaIsOnline(triedLocalSchema)) // inside the loop to not block other errors
       validate(triedLocalSchema, toLocalSchemas(xml)) shouldBe a[Success[_]]
     }
@@ -83,28 +85,25 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   }
 
   private def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
-    schema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream))) match {
-      case Failure(e: SAXParseException) =>
-        showErrorWithSourceContext(xmlString, e)
-        Failure(e)
-      case x => x
-    }
+    schema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream)))
+      .doIfFailure {
+        case e: SAXParseException => showErrorWithSourceContext(xmlString, e)
+      }
   }
 
-  private def easyLocationsIn(xml: Elem): Seq[String] = {
+  private def easyLocationsIn(xml: Elem): immutable.Iterable[File] = {
 
-    val attributeValues = xml.attributes.asAttrMap.map {
-      case ("xsi:noNamespaceSchemaLocation", value: String) => Some(s"dummyUri $value")
-      case ("xsi:schemaLocation", value: String) => Some(value)
-      case _ => None
-    }.filter(_.isDefined).flatten
+    val attributeValues = xml.attributes.asAttrMap.collect {
+      case ("xsi:noNamespaceSchemaLocation", value: String) => s"dummyUri $value"
+      case ("xsi:schemaLocation", value: String) => value
+    }
     // now we should have strings formatted like: "nsUri1 xsdUrl1 nsUri2 xsdUrl2"
-    attributeValues
-      .flatMap(_.trim.split(" +").grouped(2).toList)  // extract (uri,url) tuples
-      .map(_.applyOrElse(1, "").toString) // get second element of each tuple
-      .withFilter(_.contains("easy.dans"))
-      .map(_.replace(httpsEasySchemaBase, schemaDir.toString()))
-      .toSeq
+    for {
+      value <- attributeValues
+      tuples <- value.trim.split(" +").grouped(2) // extract (uri,url) tuples
+      url = tuples.applyOrElse(1, "").toString // get second element of each tuple
+      if url contains "easy.dans"
+    } yield File(url.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
   private def schemaIsOnline(schema: Try[Schema]): Boolean = {
