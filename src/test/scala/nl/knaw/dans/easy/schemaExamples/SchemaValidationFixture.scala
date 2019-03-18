@@ -85,7 +85,8 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   }
 
   private def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
-    schema.map(_.newValidator().validate(new StreamSource(xmlString.inputStream)))
+    schema.map(_.newValidator()
+      .validate(new StreamSource(xmlString.inputStream)))
       .doIfFailure {
         case e: SAXParseException => showErrorWithSourceContext(xmlString, e)
       }
