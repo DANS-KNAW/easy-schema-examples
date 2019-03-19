@@ -12,6 +12,6 @@ Development cycle
 * Run `mvn clean install` in `easy-schema`.
 * Run `mvn clean generate-test-resources` in this project.
 * Update the examples and fix failing tests.
-* Some tests will be ignored with `...lastLocalIsPublic was false` messages.
+* Some tests will be ignored because of `assume(lastLocalIsPublic)`, reported with `...lastLocalIsPublic was false` messages.
 * Merge both projects, publish schema's.
 * The test ignored above should now succeed.
