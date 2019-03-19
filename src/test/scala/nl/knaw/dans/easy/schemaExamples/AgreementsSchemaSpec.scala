@@ -25,4 +25,7 @@ class AgreementsSchemaSpec extends SchemaValidationFixture {
     "example",
     "bag/agreements/example1.xml",
   )
+  forEvery(examples) { example =>
+    (exampleDir / example).contentAsString should include(publicSchema)
+  }
 }

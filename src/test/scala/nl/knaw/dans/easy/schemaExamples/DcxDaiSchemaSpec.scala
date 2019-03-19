@@ -19,14 +19,17 @@ import org.scalatest.prop.TableFor1
 
 class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
-  override val publicSchema: String = s"$httpsEasySchemaBase/dcx/2019/01/dcx-dai.xsd"
   override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
+  override val publicSchema: String = localSchemaFile.toString.replace(schemaDir.toString(),httpsEasySchemaBase)
   override val examples: TableFor1[String] = Table(
     "example",
     "dcx-dai/example2.xml",
   )
 
-  "publicSchema" should "have the same date qualifier as localSchemaFile" in {
-    publicSchema.replace(httpsEasySchemaBase, "") shouldBe localSchemaFile.replace(schemaDir.toString(), "")
+  "examples" should "reference the last schema version" in {
+    forEvery(examples) { example =>
+      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
+      (exampleDir / example).contentAsString.contains(publicSchema) shouldBe true
+    }
   }
 }
