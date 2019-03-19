@@ -16,8 +16,11 @@
 package nl.knaw.dans.easy
 
 import better.files.File
+import org.scalatest.enablers.Existence
 
 package object schemaExamples {
+
+  implicit def existenceOfFile[FILE <: better.files.File]: Existence[FILE] = _.exists
 
   val schemaDir = File("target/easy-schema")
   val exampleDir = File("src/main/assembly/dist/examples")

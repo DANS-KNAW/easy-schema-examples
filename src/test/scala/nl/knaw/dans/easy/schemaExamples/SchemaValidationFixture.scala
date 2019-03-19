@@ -59,7 +59,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
       val xml = XML.loadFile((exampleDir / example).toString())
-      easyLocationsIn(xml).foreach(_.toJava should exist)
+      every(easyLocationsIn(xml)) should exist
       assume(schemaIsOnline(triedLocalSchema)) // inside the loop to not block other errors
       validate(triedLocalSchema, toLocalSchemas(xml)) shouldBe a[Success[_]]
     }
