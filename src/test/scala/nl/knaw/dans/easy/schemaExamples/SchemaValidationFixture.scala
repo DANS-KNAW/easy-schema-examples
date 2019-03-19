@@ -26,7 +26,6 @@ import nl.knaw.dans.lib.error._
 import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
-import scala.collection.immutable
 import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
@@ -92,7 +91,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
       }
   }
 
-  private def easyLocationsIn(xml: Elem): immutable.Iterable[File] = {
+  private def easyLocationsIn(xml: Elem): Iterable[File] = {
 
     val attributeValues = xml.attributes.asAttrMap.collect {
       case ("xsi:noNamespaceSchemaLocation", value: String) => s"dummyUri $value"
