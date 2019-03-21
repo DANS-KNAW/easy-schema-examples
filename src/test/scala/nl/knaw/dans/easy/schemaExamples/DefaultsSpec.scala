@@ -53,8 +53,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     exampleDir
       .walk()
       .count(!_.isDirectory) shouldBe
-      File("src/test/scala/nl/knaw/dans/easy/schemaExamples")
-        .walk().collect {
+      File("src/test/scala/nl/knaw/dans/easy/schemaExamples").walk().collect {
         case f: File if f.name.endsWith("SchemaSpec.scala") => countTestedFiles(f)
       }.sum
   }
