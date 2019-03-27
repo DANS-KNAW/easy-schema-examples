@@ -17,14 +17,11 @@
 
 -->
 <ddm:DDM xmlns:ddm="http://easy.dans.knaw.nl/schemas/md/ddm/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:dcx-dai="http://easy.dans.knaw.nl/schemas/dcx/dai/"
-    xsi:schemaLocation=
-    "http://easy.dans.knaw.nl/schemas/dcx/dai/ https://easy.dans.knaw.nl/schemas/dcx/dcx-dai.xsd
-     http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
-    ">
-    
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:dcx-dai="http://easy.dans.knaw.nl/schemas/dcx/dai/"
+         xsi:schemaLocation="http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd">
+
     <!-- If you view this example in a browser, click 'page source' to see the namespace declarations. -->
 
     <!-- 

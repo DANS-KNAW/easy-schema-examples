@@ -15,11 +15,14 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import scala.util.Success
+import org.scalatest.prop.TableFor1
 
-class DcxGmlSpec extends SchemaValidationFixture {
+class FilesSchemaSpec extends SchemaValidationFixture {
 
-  "example1" should "be schema valid" in {
-    val xml = loadExampleXml("dcx-gml/example1.xml")
-  }
+  override val publicSchema: String = s"$httpsEasySchemaBase/bag/metadata/files/files.xsd"
+  override val localSchemaFile: String = lastLocalXsd("bag/metadata/files", "files.xsd")
+  override val examples: TableFor1[String] = Table(
+    "example",
+    "bag/files/example1.xml",
+  )
 }

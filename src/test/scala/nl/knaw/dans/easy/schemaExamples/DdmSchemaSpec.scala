@@ -15,15 +15,18 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import scala.util.Success
+import org.scalatest.prop.TableFor1
 
-class DdmSpec extends SchemaValidationFixture {
+class DdmSchemaSpec extends SchemaValidationFixture {
 
-  "example1" should "be schema valid" in {
-    val xml = loadExampleXml("ddm/example1.xml")
-  }
-
-  "example2" should "be schema valid" in {
-    val xml = loadExampleXml("ddm/example2.xml")
-  }
+  override val publicSchema: String = s"$httpsEasySchemaBase/md/ddm/ddm.xsd"
+  override val localSchemaFile: String = lastLocalXsd("md", "ddm.xsd")
+  override val examples: TableFor1[String] = Table(
+    "example",
+    "dcx-dai/example1.xml",
+    "dcx-gml/example1.xml",
+    "ddm/example1.xml",
+    "ddm/example2.xml",
+    "abr-type/example1.xml",
+  )
 }

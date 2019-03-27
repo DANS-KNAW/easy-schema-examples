@@ -15,12 +15,21 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import scala.util.Success
+import org.scalatest.prop.TableFor1
 
-class CollectionsDmoSpec extends SchemaValidationFixture {
+class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
+  override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
+  override val publicSchema: String = localSchemaFile.toString.replace(schemaDir.toString(), httpsEasySchemaBase)
+  override val examples: TableFor1[String] = Table(
+    "example",
+    "dcx-dai/example2.xml",
+  )
 
-  "validator" should "succeed" in {
-    val xml = loadExampleXml("collections/dmo/example1.xml")
+  "examples" should "reference the last schema version" in {
+    forEvery(examples) { example =>
+      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
+      (exampleDir / example).contentAsString.contains(publicSchema) shouldBe true
+    }
   }
 }

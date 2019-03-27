@@ -17,7 +17,7 @@
 
 -->
 <dcx-dai:creatorDetails xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcx-dai="http://easy.dans.knaw.nl/schemas/dcx/dai/"
-    xsi:schemaLocation="http://easy.dans.knaw.nl/schemas/dcx/dai/ https://easy.dans.knaw.nl/schemas/dcx/dcx-dai.xsd">
+                        xsi:schemaLocation="http://easy.dans.knaw.nl/schemas/dcx/dai/ https://easy.dans.knaw.nl/schemas/dcx/2019/01/dcx-dai.xsd">
     <dcx-dai:author>
         <dcx-dai:titles xml:lang="en">B.L.I.S.</dcx-dai:titles>
         <dcx-dai:initials>J.P.H.</dcx-dai:initials>

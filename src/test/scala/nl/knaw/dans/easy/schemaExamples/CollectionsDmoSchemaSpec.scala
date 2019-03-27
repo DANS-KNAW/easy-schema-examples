@@ -15,12 +15,14 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import scala.util.Success
+import org.scalatest.prop.TableFor1
 
-class AgreementsSpec extends SchemaValidationFixture {
+class CollectionsDmoSchemaSpec extends SchemaValidationFixture {
 
-
-  "validator" should "succeed" in {
-    val xml = loadExampleXml("bag/agreements/example1.xml")
-  }
+  override val publicSchema: String = s"$httpsEasySchemaBase/collections/dmo-collection.xsd"
+  override val localSchemaFile: String = (schemaDir / "collections/dmo-collection.xsd").toString()
+  override val examples: TableFor1[String] = Table(
+    "example",
+    "collections/dmo/example1.xml",
+  )
 }
