@@ -225,10 +225,10 @@
 
         <dcterms:language>Nederlands</dcterms:language>
         <dc:language>Engels</dc:language>
-        <dc:language xsi:type='dcterms:ISO639-3'>Ned</dc:language>
-        <dc:language xsi:type='dcterms:ISO639-2'>en</dc:language>
-        <dcterms:language xsi:type='dcterms:ISO639-3'>Dui</dcterms:language>
-        <dcterms:language xsi:type='dcterms:ISO639-2'>fr</dcterms:language>
+        <dc:language xsi:type='dcterms:ISO639-3'>nld</dc:language>
+        <dc:language xsi:type='dcterms:ISO639-2'>eng</dc:language>
+        <dcterms:language xsi:type='dcterms:ISO639-3'>deu</dcterms:language>
+        <dcterms:language xsi:type='dcterms:ISO639-2'>fre</dcterms:language>
 
         <!-- =================================================== misceleneous -->
 
