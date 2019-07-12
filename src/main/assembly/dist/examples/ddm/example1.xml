@@ -58,7 +58,7 @@
                 <dcx-dai:surname>Aarden</dcx-dai:surname>
                 <dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>
                 <dcx-dai:ORCID>https://orcid.org/0000-0002-1825-0097</dcx-dai:ORCID>
-                <dcx-dai:ISNI>http://www.isni.org/0000000121032683</dcx-dai:ISNI>
+                <dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>
                 <dcx-dai:role>Distributor</dcx-dai:role>
                 <dcx-dai:organization>
                     <dcx-dai:name xml:lang="en">Utrecht University</dcx-dai:name>
@@ -105,7 +105,7 @@
                 <dcx-dai:surname>Jansen</dcx-dai:surname>
                 <dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>
                 <dcx-dai:ORCID>https://orcid.org/0000-0002-1825-0097</dcx-dai:ORCID>
-                <dcx-dai:ISNI>http://www.isni.org/0000000121032683</dcx-dai:ISNI>
+                <dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>
                 <dcx-dai:role>Supervisor</dcx-dai:role>
                 <dcx-dai:organization>
                     <dcx-dai:name>Babylon b.v.</dcx-dai:name>
