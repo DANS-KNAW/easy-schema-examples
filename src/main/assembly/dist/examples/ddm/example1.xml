@@ -128,6 +128,11 @@
 
         <ddm:relation href="http://www.example.com">example.com</ddm:relation>
         <ddm:isPartOf href="http://doi.org/journaldoi">journal title</ddm:isPartOf>
+        <ddm:relation scheme="STREAMING_SURROGATE_RELATION">datavault-path</ddm:relation>
+        <ddm:isFormatOf href="https://doi.org/10.17026/test-123-456" scheme="DOI">https://doi.org/10.17026/test-123-456</ddm:isFormatOf>
+        <ddm:isFormatOf scheme="id-type:ARCHIS-ZAAK-IDENTIFICATIE">55657</ddm:isFormatOf>
+        <dcterms:requires>a description of a related resource</dcterms:requires>
+        <ddm:references scheme="URL" href="http://www.link.to/webresource">A related webresource</ddm:references>
 
         <!-- Use 'name=value' and ';' for lists of items that belong together -->
         <dc:coverage xsi:type="dct:Period">name=The Great Depression; start=1929; end=1939;</dc:coverage>
