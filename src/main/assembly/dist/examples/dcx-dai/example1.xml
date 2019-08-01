@@ -57,7 +57,9 @@
                 <dcx-dai:initials>J.P.H.</dcx-dai:initials>
                 <dcx-dai:insertions>van den</dcx-dai:insertions>
                 <dcx-dai:surname>Aarden</dcx-dai:surname>
-                <dcx-dai:DAI>123456789</dcx-dai:DAI>
+                <dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>
+                <dcx-dai:ORCID>https://orcid.org/0000-0002-1825-0097</dcx-dai:ORCID>
+                <dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>
                 <dcx-dai:role>RelatedPerson</dcx-dai:role>
                 <dcx-dai:organization>
                     <dcx-dai:name xml:lang="en">Maastricht University</dcx-dai:name>
@@ -109,7 +111,9 @@
                 <dcx-dai:initials>J.P.H.</dcx-dai:initials>
                 <dcx-dai:insertions>van den</dcx-dai:insertions>
                 <dcx-dai:surname>Aarden</dcx-dai:surname>
-                <dcx-dai:DAI>123456789</dcx-dai:DAI>
+                <dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>
+                <dcx-dai:ORCID>https://orcid.org/0000-0002-1825-0097</dcx-dai:ORCID>
+                <dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>
                 <dcx-dai:role>Sponsor</dcx-dai:role>
                 <dcx-dai:organization>
                     <dcx-dai:name xml:lang="en">Maastricht University</dcx-dai:name>
