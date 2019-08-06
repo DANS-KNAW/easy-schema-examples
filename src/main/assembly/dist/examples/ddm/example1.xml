@@ -19,7 +19,6 @@
 <ddm:DDM xmlns:ddm="http://easy.dans.knaw.nl/schemas/md/ddm/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:dct="http://purl.org/dc/terms/"
     xmlns:dcx-dai="http://easy.dans.knaw.nl/schemas/dcx/dai/"
     xsi:schemaLocation="
@@ -132,7 +131,7 @@
         <ddm:relation scheme="STREAMING_SURROGATE_RELATION">datavault-path</ddm:relation>
         <ddm:isFormatOf href="https://doi.org/10.17026/test-123-456" scheme="DOI">https://doi.org/10.17026/test-123-456</ddm:isFormatOf>
         <ddm:isFormatOf scheme="id-type:ARCHIS-ZAAK-IDENTIFICATIE">55657</ddm:isFormatOf>
-        <dcterms:requires>a description of a related resource</dcterms:requires>
+        <dct:requires>a description of a related resource</dct:requires>
         <ddm:references scheme="URL" href="http://www.link.to/webresource">A related webresource</ddm:references>
 
         <!-- Use 'name=value' and ';' for lists of items that belong together -->
