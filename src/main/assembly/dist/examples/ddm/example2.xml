@@ -143,9 +143,9 @@
         <ddm:relation scheme="STREAMING_SURROGATE_RELATION">/domain/dans/user/somebody/collection/test1/presentation/testA</ddm:relation>
         <dc:relation>urn:nbn:nl:ui:13-fant-asy</dc:relation>
         <dcterms:relation>10.5072/fantasy-doi-rel</dcterms:relation>
-        <dcterms:conformsTo>http://doi.org/10.1111/sode.12120</dcterms:conformsTo>
-        <dcterms:isVersionOf>http://hdl.handle.net/2066/121062</dcterms:isVersionOf>
-        <dcterms:hasVersion>http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-2ajw-cq</dcterms:hasVersion>
+        <ddm:conformsTo scheme="DOI">http://doi.org/10.1111/sode.12120</ddm:conformsTo>
+        <ddm:isVersionOf href="http://hdl.handle.net/2066/121062">http://hdl.handle.net/2066/121062</ddm:isVersionOf>
+        <ddm:hasVersion scheme="URN">http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-2ajw-cq</ddm:hasVersion>
         <dcterms:isReplacedBy>A descriptin of object 6</dcterms:isReplacedBy>
         <dcterms:replaces>A descriptin of object 7</dcterms:replaces>
         <dcterms:isRequiredBy>A descriptin of object 8</dcterms:isRequiredBy>
