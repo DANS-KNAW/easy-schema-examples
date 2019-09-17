@@ -34,7 +34,7 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
-        <easy.schema.version>2.1.10</easy.schema.version>
+        <easy.schema.version>3.0.0-SNAPSHOT</easy.schema.version>
     </properties>
 
     <scm>
@@ -100,12 +100,9 @@
                     <includes>
                         <include>pom.xml</include>
                         <include>src/test/scala/**</include>
-                        <include>src/main/assembly/**/*.xml</include>
+                        <include>src/main/resources/**.xml</include>
                     </includes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,7 +121,6 @@
                                     <groupId>nl.knaw.dans.easy</groupId>
                                     <artifactId>easy-schema</artifactId>
                                     <version>${easy.schema.version}</version>
-                                    <type>tar.gz</type>
                                     <outputDirectory>${project.build.directory}/easy-schema</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
