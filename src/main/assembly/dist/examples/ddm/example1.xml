@@ -80,8 +80,8 @@
         <ddm:audience>D24000</ddm:audience>
         
         <!-- Exactly one ddm:accessRights. Valid codes for the element ddm:accessRights are
-        OPEN_ACCESS_FOR_REGISTERED_USERS, GROUP_ACCESS, REQUEST_PERMISSION and NO_ACCESS. -->
-        <ddm:accessRights>OPEN_ACCESS_FOR_REGISTERED_USERS</ddm:accessRights>
+        OPEN_ACCESS, REQUEST_PERMISSION and NO_ACCESS. -->
+        <ddm:accessRights>OPEN_ACCESS</ddm:accessRights>
         
     </ddm:profile>
     
