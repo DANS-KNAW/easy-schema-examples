@@ -22,12 +22,12 @@
             xmlns="http://easy.dans.knaw.nl/schemas/bag/metadata/agreements/"
 >
     <depositAgreement>
-        <signerId easy-account="user001">MisterX</signerId>
+        <signerId easy-account="user001" email="info@dans.knaw.nl">MisterX</signerId>
         <dcterms:dateAccepted>2018-03-22T21:43:01.000+01:00</dcterms:dateAccepted>
         <depositAgreementAccepted>true</depositAgreementAccepted>
     </depositAgreement>
     <personalDataStatement>
-        <signerId>MisterX</signerId>
+        <signerId easy-account="user001" email="info@dans.knaw.nl">MisterX</signerId>
         <dateSigned>2018-03-22T21:43:01.000+01:00</dateSigned>
         <containsPrivacySensitiveData>false</containsPrivacySensitiveData>
     </personalDataStatement>

@@ -23,7 +23,7 @@ package object schemaExamples {
   implicit def existenceOfFile[FILE <: better.files.File]: Existence[FILE] = _.exists
 
   val schemaDir = File("target/easy-schema")
-  val exampleDir = File("src/main/assembly/dist/examples")
+  val exampleDir = File("src/main/resources/examples")
 
   def lastLocalXsd(dir: String, file: String): String = {
     (schemaDir / dir)

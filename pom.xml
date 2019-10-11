@@ -22,19 +22,19 @@
     <parent>
         <groupId>nl.knaw.dans.shared</groupId>
         <artifactId>dans-scala-project</artifactId>
-        <version>4.0.0</version>
+        <version>5.1.0</version>
     </parent>
 
     <groupId>nl.knaw.dans.easy</groupId>
     <artifactId>easy-schema-examples</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
 
     <name>EASY Schema Examples</name>
     <description>Collection of examples of the metadata schema's used by EASY</description>
     <inceptionYear>2019</inceptionYear>
 
     <properties>
-        <easy.schema.version>2.1.10</easy.schema.version>
+        <easy.schema.version>3.0.2</easy.schema.version>
     </properties>
 
     <scm>
@@ -62,34 +62,29 @@
 
     <repositories>
         <repository>
-            <id>DANS</id>
+            <id>dans-releases</id>
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <url>http://maven.dans.knaw.nl/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>https://maven.dans.knaw.nl/releases/</url>
+        </repository>
+        <repository>
+            <id>dans-snapshots</id>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>https://maven.dans.knaw.nl/snapshots/</url>
         </repository>
     </repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>DANS</id>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <url>http://maven.dans.knaw.nl/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
@@ -97,17 +92,12 @@
                     <includes>
                         <include>pom.xml</include>
                         <include>src/test/scala/**</include>
-                        <include>src/main/assembly/**/*.xml</include>
+                        <include>src/main/resources/**.xml</include>
                     </includes>
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
                 <executions>
                     <execution>
                         <id>test-resources</id>
@@ -121,7 +111,6 @@
                                     <groupId>nl.knaw.dans.easy</groupId>
                                     <artifactId>easy-schema</artifactId>
                                     <version>${easy.schema.version}</version>
-                                    <type>tar.gz</type>
                                     <outputDirectory>${project.build.directory}/easy-schema</outputDirectory>
                                 </artifactItem>
                             </artifactItems>

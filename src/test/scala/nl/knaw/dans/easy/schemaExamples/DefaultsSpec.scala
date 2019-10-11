@@ -43,8 +43,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
       .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
   }
 
-  it should "equal not qualified agreements.xsd" in pendingUntilFixed {
-    // TODO ignore or fix white space differences; then move to table driven test
+  it should "equal not qualified agreements.xsd" in {
     File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
       .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
   }
