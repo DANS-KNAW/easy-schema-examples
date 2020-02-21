@@ -18,6 +18,8 @@ package nl.knaw.dans.easy.schemaExamples
 import better.files.File
 import org.scalatest.prop.TableFor1
 
+import scala.util.Failure
+
 class DdmSchemaSpec extends SchemaValidationFixture {
 
   override val publicSchema: String = s"$httpsEasySchemaBase/md/ddm/ddm.xsd"
@@ -29,4 +31,19 @@ class DdmSchemaSpec extends SchemaValidationFixture {
     exampleDir / "ddm/example2.xml",
     exampleDir / "abr-type/example1.xml",
   )
+
+  "DOI validation" should "fail on a relation" in pendingUntilFixed {
+    validateWithLocal(modify(
+      ".*</ddm:relation>.*",
+      """<ddm:relation scheme="id-type:DOI" href="https://doi.org/42">42</ddm:relation>"""
+    )) shouldBe a[Failure[_]]
+  }
+
+  private def modify(lineMatches: String, replacement: String) = {
+    File("src/main/resources/examples/ddm/example1.xml")
+      .contentAsString.split("\n")
+      .map(line => if (line.matches(lineMatches)) replacement
+                   else line
+      ).mkString("\n")
+  }
 }

@@ -24,6 +24,7 @@ import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{ Schema, SchemaFactory }
 import nl.knaw.dans.lib.error._
+import org.scalatest.matchers.Matcher
 import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
@@ -90,6 +91,15 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     // reported with: ...lastLocalIsPublic was false
     val newPublicSchema = localSchemaFile.replace(schemaDir.toString(), httpsEasySchemaBase)
     Try(new URL(newPublicSchema).openStream()).fold(_ => false, _ => true)
+  }
+
+  def notMatchRegexpInXsd: Matcher[Any] = matchPattern {
+    case Failure(e: SAXParseException) if e.getMessage.contains("is not facet-valid with respect to pattern") =>
+  }
+
+  def validateWithLocal(xml: String): Try[Unit] = {
+    assume(schemaIsOnline(triedLocalSchema))
+    validate(triedLocalSchema, xml)
   }
 
   def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {

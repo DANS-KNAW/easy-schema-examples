@@ -16,11 +16,9 @@
 package nl.knaw.dans.easy.schemaExamples
 
 import better.files.File
-import org.scalatest.matchers.Matcher
 import org.scalatest.prop.TableFor1
 
-import scala.util.{ Failure, Success }
-import scala.xml.SAXParseException
+import scala.util.Success
 
 class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
@@ -38,25 +36,25 @@ class DcxDaiSchemaSpec extends SchemaValidationFixture {
     )
   }
 
-  "ISNI validation" should "fail with X as 17th digit" in  {
-    validateVariant(""".*<dcx-dai:DAI>.*""", "<dcx-dai:ISNI>00000001210322683X</dcx-dai:ISNI>") should notMatchRegexpInXsd
+  "ISNI validation" should "fail with X as 17th digit" in {
+    validateWithLocal(modify(
+      """.*<dcx-dai:DAI>.*""",
+      "<dcx-dai:ISNI>00000001210322683X</dcx-dai:ISNI>"
+    )) should notMatchRegexpInXsd
   }
 
   it should "fail with X as 17th digit in URL" in pendingUntilFixed {
-    validateVariant(""".*<dcx-dai:DAI>.*""", "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683X</dcx-dai:ISNI>") should notMatchRegexpInXsd
+    validateWithLocal(modify(
+      """.*<dcx-dai:DAI>.*""",
+      "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683X</dcx-dai:ISNI>"
+    )) should notMatchRegexpInXsd
   }
 
   it should "succeed with separators" in pendingUntilFixed { // move to examples table when fixed
-    validateVariant(""".*<dcx-dai:role>.*""", "<dcx-dai:ISNI>ISNI: 0000 00012 1032 2683</dcx-dai:ISNI>") shouldBe a[Success[_]]
-  }
-
-  private def notMatchRegexpInXsd: Matcher[Any] = matchPattern {
-    case Failure(e: SAXParseException) if e.getMessage.contains("is not facet-valid with respect to pattern") =>
-  }
-
-  private def validateVariant(lineMatches: String, replacement: String) = {
-    assume(schemaIsOnline(triedLocalSchema))
-    validate(triedLocalSchema, modify(lineMatches, replacement))
+    validateWithLocal(modify(
+      """.*<dcx-dai:role>.*""",
+      "<dcx-dai:ISNI>ISNI: 0000 00012 1032 2683</dcx-dai:ISNI>"
+    )) shouldBe a[Success[_]]
   }
 
   private def modify(lineMatches: String, replacement: String) = {
