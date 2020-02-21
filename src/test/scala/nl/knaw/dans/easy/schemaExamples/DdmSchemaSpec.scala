@@ -32,10 +32,17 @@ class DdmSchemaSpec extends SchemaValidationFixture {
     exampleDir / "abr-type/example1.xml",
   )
 
-  "DOI validation" should "fail on a relation" in pendingUntilFixed {
+  "relation validation" should "report an invalid DOI" in pendingUntilFixed {
     validateWithLocal(modify(
       ".*</ddm:relation>.*",
       """<ddm:relation scheme="id-type:DOI" href="https://doi.org/42">42</ddm:relation>"""
+    )) shouldBe a[Failure[_]]
+  }
+
+  it should "an XSS attack" in pendingUntilFixed {
+    validateWithLocal(modify(
+      ".*</ddm:relation>.*",
+      """<ddm:relation xml:lang="nld" href="javascript:alert('XSS')">xxx</ddm:relation>"""
     )) shouldBe a[Failure[_]]
   }
 
