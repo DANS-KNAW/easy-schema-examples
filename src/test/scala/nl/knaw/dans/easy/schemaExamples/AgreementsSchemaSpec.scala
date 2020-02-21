@@ -15,17 +15,14 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
+import better.files.File
 import org.scalatest.prop.TableFor1
 
 class AgreementsSchemaSpec extends SchemaValidationFixture {
 
   override val publicSchema: String = s"$httpsEasySchemaBase/bag/metadata/agreements/agreements.xsd"
   override val localSchemaFile: String = lastLocalXsd("bag/metadata/agreements", "agreements.xsd")
-  override val examples: TableFor1[String] = Table(
-    "example",
-    "bag/agreements/example1.xml",
+  override val examples: TableFor1[File] = Table("file",
+    exampleDir / "bag/agreements/example1.xml",
   )
-  forEvery(examples) { example =>
-    (exampleDir / example).contentAsString should include(publicSchema)
-  }
 }

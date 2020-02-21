@@ -17,6 +17,7 @@ package nl.knaw.dans.easy.schemaExamples
 
 import java.net.{ URL, UnknownHostException }
 
+import better.files.File.currentWorkingDirectory
 import better.files.{ File, StringOps }
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
@@ -30,10 +31,11 @@ import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
 trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
+  lazy val testDir: File = currentWorkingDirectory / "target" / "test" / getClass.getSimpleName
 
   val publicSchema: String
   val localSchemaFile: String
-  val examples: TableFor1[String]
+  val examples: TableFor1[File]
 
   private val publicEasySchemaBase = "//easy.dans.knaw.nl/schemas"
   protected val httpsEasySchemaBase = s"https:$publicEasySchemaBase"
@@ -43,7 +45,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
       .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
       .newSchema(Array[Source](new StreamSource(publicSchema.toString)))
   }
-  private lazy val triedLocalSchema: Try[Schema] = Try {
+  lazy val triedLocalSchema: Try[Schema] = Try {
     // lazy for two reasons:
     // - schemaFile is set by concrete test class
     // - postpone loading until actually validating
@@ -58,7 +60,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
 
   "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
-      val xml = XML.loadFile((exampleDir / example).toString())
+      val xml = XML.loadFile(example.toString())
       every(easyLocationsIn(xml)) should exist
       assume(schemaIsOnline(triedLocalSchema)) // inside the loop to not block other errors
       validate(triedLocalSchema, toLocalSchemas(xml)) shouldBe a[Success[_]]
@@ -70,8 +72,15 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     assume(schemaIsOnline(triedPublicSchema)) // outside the loop as we are only validating
     assume(lastLocalIsPublic)
     forEvery(examples) { example =>
-      val xml = XML.loadFile((exampleDir / example).toString())
+      val xml = XML.loadFile(example.toString())
       validate(triedPublicSchema, xml.toString) shouldBe a[Success[_]]
+    }
+  }
+
+  it should "reference the last schema version" in {
+    forEvery(examples) { example =>
+      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
+      example.contentAsString.contains(publicSchema) shouldBe true
     }
   }
 
@@ -83,7 +92,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     Try(new URL(newPublicSchema).openStream()).fold(_ => false, _ => true)
   }
 
-  private def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
+  def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
     schema.map(_.newValidator()
       .validate(new StreamSource(xmlString.inputStream)))
       .doIfFailure {
@@ -106,7 +115,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     } yield File(url.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
-  private def schemaIsOnline(schema: Try[Schema]): Boolean = {
+  def schemaIsOnline(schema: Try[Schema]): Boolean = {
     // to ignore tests when executed without web-access or when third party schema's are not available
     // reported with: ...triedPublicSchema was false
     schema match {

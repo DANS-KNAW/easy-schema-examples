@@ -15,21 +15,55 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
+import better.files.File
+import org.scalatest.matchers.Matcher
 import org.scalatest.prop.TableFor1
+
+import scala.util.{ Failure, Success }
+import scala.xml.SAXParseException
 
 class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
   override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
   override val publicSchema: String = localSchemaFile.toString.replace(schemaDir.toString(), httpsEasySchemaBase)
-  override val examples: TableFor1[String] = Table(
-    "example",
-    "dcx-dai/example2.xml",
-  )
+  override val examples: TableFor1[File] = {
+    if (testDir.exists) testDir.delete()
+    testDir.createDirectories()
+    Table("file",
+      exampleDir / "dcx-dai/example2.xml",
+      (testDir / "isni1.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:ISNI>0000 0001 2103 2683</dcx-dai:ISNI>")),
+      (testDir / "isni2.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:ISNI>00000001 2103 2683</dcx-dai:ISNI>")),
+      (testDir / "isni3.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>")),
+      // TODO More variants, also ORCID and DAI. NOTE: the latter regexp is defined both in ddm.xsd as in dcx-dai.xsd
+    )
+  }
 
-  "examples" should "reference the last schema version" in {
-    forEvery(examples) { example =>
-      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
-      (exampleDir / example).contentAsString.contains(publicSchema) shouldBe true
-    }
+  "ISNI validation" should "fail with X as 17th digit" in  {
+    validateVariant(""".*<dcx-dai:DAI>.*""", "<dcx-dai:ISNI>00000001210322683X</dcx-dai:ISNI>") should notMatchRegexpInXsd
+  }
+
+  it should "fail with X as 17th digit in URL" in pendingUntilFixed {
+    validateVariant(""".*<dcx-dai:DAI>.*""", "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683X</dcx-dai:ISNI>") should notMatchRegexpInXsd
+  }
+
+  it should "succeed with separators" in pendingUntilFixed { // move to examples table when fixed
+    validateVariant(""".*<dcx-dai:role>.*""", "<dcx-dai:ISNI>ISNI: 0000 00012 1032 2683</dcx-dai:ISNI>") shouldBe a[Success[_]]
+  }
+
+  private def notMatchRegexpInXsd: Matcher[Any] = matchPattern {
+    case Failure(e: SAXParseException) if e.getMessage.contains("is not facet-valid with respect to pattern") =>
+  }
+
+  private def validateVariant(lineMatches: String, replacement: String) = {
+    assume(schemaIsOnline(triedLocalSchema))
+    validate(triedLocalSchema, modify(lineMatches, replacement))
+  }
+
+  private def modify(lineMatches: String, replacement: String) = {
+    File("src/main/resources/examples/dcx-dai/example2.xml")
+      .contentAsString.split("\n")
+      .map(line => if (line.matches(lineMatches)) replacement
+                   else line
+      ).mkString("\n")
   }
 }
