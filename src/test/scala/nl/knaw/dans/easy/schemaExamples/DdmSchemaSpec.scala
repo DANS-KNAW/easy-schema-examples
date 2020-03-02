@@ -39,7 +39,7 @@ class DdmSchemaSpec extends SchemaValidationFixture {
     )) shouldBe a[Failure[_]]
   }
 
-  it should "an XSS attack" in pendingUntilFixed {
+  it should "report an XSS attack" in pendingUntilFixed {
     validateWithLocal(modify(
       ".*</ddm:relation>.*",
       """<ddm:relation xml:lang="nld" href="javascript:alert('XSS')">xxx</ddm:relation>"""

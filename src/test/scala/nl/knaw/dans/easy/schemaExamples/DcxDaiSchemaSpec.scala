@@ -18,8 +18,6 @@ package nl.knaw.dans.easy.schemaExamples
 import better.files.File
 import org.scalatest.prop.TableFor1
 
-import scala.util.Success
-
 class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
   override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
@@ -29,32 +27,42 @@ class DcxDaiSchemaSpec extends SchemaValidationFixture {
     testDir.createDirectories()
     Table("file",
       exampleDir / "dcx-dai/example2.xml",
-      (testDir / "isni1.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:ISNI>0000 0001 2103 2683</dcx-dai:ISNI>")),
-      (testDir / "isni2.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:ISNI>00000001 2103 2683</dcx-dai:ISNI>")),
-      (testDir / "isni3.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>")),
-      // TODO More variants, also ORCID and DAI. NOTE: the latter regexp is defined both in ddm.xsd as in dcx-dai.xsd
+      (testDir / "isni0.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:ISNI>0000 0001 2103 2683</dcx-dai:ISNI>")),
+      (testDir / "isni1.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>0000000121032268</dcx-dai:ISNI>")),
+      (testDir / "isni2.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683</dcx-dai:ISNI>")),
+      (testDir / "isni3.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>ISNI: 0000 0001 2103 2268</dcx-dai:ISNI>")),
+      (testDir / "isni4.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>ISNI:0000 0001 2103 2268</dcx-dai:ISNI>")),
+      (testDir / "isni5.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>ISNI 0000 0001 2103 2268</dcx-dai:ISNI>")),
+      (testDir / "isni6.xml").write(modify(".*<dcx-dai:role>.*", "<dcx-dai:ISNI>ISNI0000000121032268</dcx-dai:ISNI>")),
+      (testDir / "orcid1.xml").write(modify(".*<dcx-dai:ORCID>.*", "<dcx-dai:ORCID>https://orcid.org/0000-0002-1825-009x</dcx-dai:ORCID>")),
+      (testDir / "orcid2.xml").write(modify(".*<dcx-dai:ORCID>.*", "<dcx-dai:ORCID>0000-0002-1825-009X</dcx-dai:ORCID>")),
+      (testDir / "dai1.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>123456789</dcx-dai:DAI>")),
+      (testDir / "dai2.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>123456789x</dcx-dai:DAI>")),
+      (testDir / "dai3.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>123456789X</dcx-dai:DAI>")),
+      (testDir / "dai4.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>")),
+      // TODO NOTE: the DAI regexp is defined both in ddm.xsd as in dcx-dai.xsd
     )
   }
 
-  "ISNI validation" should "fail with X as 17th digit" in {
+  "ISNI validation" should "report X as 17th digit" in {
     validateWithLocal(modify(
       """.*<dcx-dai:DAI>.*""",
       "<dcx-dai:ISNI>00000001210322683X</dcx-dai:ISNI>"
     )) should notMatchRegexpInXsd
   }
 
-  it should "fail with X as 17th digit in URL" in pendingUntilFixed {
+  it should "report X as 17th digit in URL" in {
     validateWithLocal(modify(
       """.*<dcx-dai:DAI>.*""",
       "<dcx-dai:ISNI>http://isni.org/isni/0000000121032683X</dcx-dai:ISNI>"
     )) should notMatchRegexpInXsd
   }
 
-  it should "succeed with separators" in pendingUntilFixed { // move to examples table when fixed
+  "DAI validation" should "report missing check digit with only 8 digits" in {
     validateWithLocal(modify(
-      """.*<dcx-dai:role>.*""",
-      "<dcx-dai:ISNI>ISNI: 0000 00012 1032 2683</dcx-dai:ISNI>"
-    )) shouldBe a[Success[_]]
+      """.*<dcx-dai:DAI>.*""",
+      "<dcx-dai:DAI>12345678</dcx-dai:DAI>"
+    )) should notMatchRegexpInXsd
   }
 
   private def modify(lineMatches: String, replacement: String) = {
