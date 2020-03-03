@@ -29,6 +29,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
       ("md/emd", "sdc.xsd"),
       ("md/emd", "xml.xsd"),
       ("bag/metadata/files", "files.xsd"),
+      ("bag/metadata/agreements", "agreements.xsd"),
     )
     forEvery(xsds) { (path, file) =>
       File(lastLocalXsd(path, file))
@@ -41,11 +42,6 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     // different path for version and version-less
     File(lastLocalXsd("md", "ddm.xsd"))
       .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
-  }
-
-  it should "equal not qualified agreements.xsd" in {
-    File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
-      .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
   }
 
   "SchemaSpec classes" should "test all examples" in {
