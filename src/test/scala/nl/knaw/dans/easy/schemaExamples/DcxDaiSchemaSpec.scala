@@ -40,7 +40,6 @@ class DcxDaiSchemaSpec extends SchemaValidationFixture {
       (testDir / "dai2.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>123456789x</dcx-dai:DAI>")),
       (testDir / "dai3.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>123456789X</dcx-dai:DAI>")),
       (testDir / "dai4.xml").write(modify(".*<dcx-dai:DAI>.*", "<dcx-dai:DAI>info:eu-repo/dai/nl/123456789</dcx-dai:DAI>")),
-      // TODO NOTE: the DAI regexp is defined both in ddm.xsd as in dcx-dai.xsd
     )
   }
 
