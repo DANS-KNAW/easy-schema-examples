@@ -74,7 +74,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     case Failure(e: SAXParseException) if e.getMessage.contains("is not facet-valid with respect to pattern") =>
   }
 
-  def validateWithLocal(xml: String): Try[Unit] = {
+  def validate(xml: String): Try[Unit] = {
     assume(schemaIsOnline(triedLocalSchema))
     validate(triedLocalSchema, xml)
   }
