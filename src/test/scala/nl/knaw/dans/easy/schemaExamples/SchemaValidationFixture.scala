@@ -15,7 +15,7 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import java.net.{ URL, UnknownHostException }
+import java.net.UnknownHostException
 
 import better.files.File.currentWorkingDirectory
 import better.files.{ File, StringOps }
@@ -41,11 +41,6 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   private val publicEasySchemaBase = "//easy.dans.knaw.nl/schemas"
   protected val httpsEasySchemaBase = s"https:$publicEasySchemaBase"
 
-  private lazy val triedPublicSchema: Try[Schema] = Try {
-    SchemaFactory
-      .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-      .newSchema(Array[Source](new StreamSource(publicSchema.toString)))
-  }
   lazy val triedLocalSchema: Try[Schema] = Try {
     // lazy for two reasons:
     // - schemaFile is set by concrete test class
@@ -68,29 +63,11 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     }
   }
 
-  it should "be schema valid with (unqualified) public schema" in {
-    // sub-schemas may not have an unqualified public schema
-    assume(schemaIsOnline(triedPublicSchema)) // outside the loop as we are only validating
-    assume(lastLocalIsPublic)
-    forEvery(examples) { example =>
-      val xml = XML.loadFile(example.toString())
-      validate(triedPublicSchema, xml.toString) shouldBe a[Success[_]]
-    }
-  }
-
   it should "reference the last schema version" in {
     forEvery(examples) { example =>
       // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
       example.contentAsString.contains(publicSchema) shouldBe true
     }
-  }
-
-  private def lastLocalIsPublic: Boolean = {
-    // to ignore tests while easy-schema and easy-schema-examples are under parallel development
-    // and the new schema's are not yet published
-    // reported with: ...lastLocalIsPublic was false
-    val newPublicSchema = localSchemaFile.replace(schemaDir.toString(), httpsEasySchemaBase)
-    Try(new URL(newPublicSchema).openStream()).fold(_ => false, _ => true)
   }
 
   def notMatchRegexpInXsd: Matcher[Any] = matchPattern {
