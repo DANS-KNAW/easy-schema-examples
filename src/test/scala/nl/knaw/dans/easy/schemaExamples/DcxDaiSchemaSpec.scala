@@ -22,11 +22,7 @@ class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
   override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
   override val publicSchema: String = localSchemaFile.toString.replace(schemaDir.toString(), httpsEasySchemaBase)
-  override val examples: TableFor1[File] = {
-    if (testDir.exists) testDir.delete()
-    testDir.createDirectories()
-    Table("file",
-      exampleDir / "dcx-dai/example2.xml",
-    )
-  }
+  override val examples: TableFor1[File] = Table("file",
+    exampleDir / "dcx-dai/example2.xml",
+  )
 }

@@ -37,7 +37,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     }
   }
 
-  it should "equal not qualified ddm.xsd" in {
+  "last local ddm.XSD" should "equal not qualified ddm.xsd" in {
     // an exception to the table driven tests:
     // different path for version and version-less
     File(lastLocalXsd("md", "ddm.xsd"))

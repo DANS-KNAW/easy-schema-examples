@@ -24,7 +24,6 @@ import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{ Schema, SchemaFactory }
 import nl.knaw.dans.lib.error._
-import org.scalatest.matchers.Matcher
 import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
 import org.scalatest.{ FlatSpec, Matchers }
 
@@ -37,6 +36,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   val publicSchema: String
   val localSchemaFile: String
   val examples: TableFor1[File]
+  private lazy val primaryExamples: TableFor1[File] = examples.filterNot(_.isChildOf(testDir))
 
   private val publicEasySchemaBase = "//easy.dans.knaw.nl/schemas"
   protected val httpsEasySchemaBase = s"https:$publicEasySchemaBase"
@@ -57,30 +57,24 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
   "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
       val xml = XML.loadFile(example.toString())
-      every(easyLocationsIn(xml)) should exist
-      assume(schemaIsOnline(triedLocalSchema)) // inside the loop to not block other errors
-      validate(triedLocalSchema, toLocalSchemas(xml)) shouldBe a[Success[_]]
+      validate(toLocalSchemas(xml)) shouldBe a[Success[_]]
     }
   }
 
-  it should "reference the last schema version" in {
-    forEvery(examples) { example =>
-      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
-      example.contentAsString.contains(publicSchema) shouldBe true
+  "primary examples" should "reference the last schema version" in {
+    // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
+    forEvery(primaryExamples)(_.contentAsString.contains(publicSchema) shouldBe true)
+  }
+
+  it should "reference existing locations" in {
+    forEvery(primaryExamples) { example =>
+      every(easyLocationsIn(XML.loadFile(example.toString))) should exist
     }
   }
 
-  def notMatchRegexpInXsd: Matcher[Any] = matchPattern {
-    case Failure(e: SAXParseException) if e.getMessage.contains("is not facet-valid with respect to pattern") =>
-  }
-
-  def validate(xml: String): Try[Unit] = {
-    assume(schemaIsOnline(triedLocalSchema))
-    validate(triedLocalSchema, xml)
-  }
-
-  def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
-    schema.map(_.newValidator()
+  def validate(xmlString: String): Try[Unit] = {
+    assume(referencedSchemasAreOnline(triedLocalSchema))
+    triedLocalSchema.map(_.newValidator()
       .validate(new StreamSource(xmlString.inputStream)))
       .doIfFailure {
         case e: SAXParseException => showErrorWithSourceContext(xmlString, e)
@@ -102,7 +96,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     } yield File(url.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
-  def schemaIsOnline(schema: Try[Schema]): Boolean = {
+  def referencedSchemasAreOnline(schema: Try[Schema]): Boolean = {
     // to ignore tests when executed without web-access or when third party schema's are not available
     // reported with: ...triedPublicSchema was false
     schema match {
@@ -126,12 +120,12 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     lines.withFilter(_.trim.nonEmpty).foreach(println)
   }
 
-  private def toLocalSchemas(xml: Elem) = {
+  def toLocalSchemas(xml: Elem): String = {
     xml
       .toString() // schema location attribute becomes a standardized one liner
       .replaceAll( // a leading space is supposed to be the location
-      s" $httpsEasySchemaBase", // replace public xsd location
-      s" file://$schemaDir" // with local xsd location
-    )
+        s" $httpsEasySchemaBase", // replace public xsd location
+        s" file://$schemaDir" // with local xsd location
+      )
   }
 }
