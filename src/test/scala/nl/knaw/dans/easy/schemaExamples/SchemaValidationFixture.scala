@@ -17,7 +17,7 @@ package nl.knaw.dans.easy.schemaExamples
 
 import java.net.{ URL, UnknownHostException }
 
-import better.files.{ File, StringOps }
+import better.files.{ File, StringExtensions }
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
