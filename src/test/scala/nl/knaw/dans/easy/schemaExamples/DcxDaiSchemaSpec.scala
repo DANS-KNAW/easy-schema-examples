@@ -15,21 +15,14 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
+import better.files.File
 import org.scalatest.prop.TableFor1
 
 class DcxDaiSchemaSpec extends SchemaValidationFixture {
 
   override val localSchemaFile: String = lastLocalXsd("dcx", "dcx-dai.xsd")
   override val publicSchema: String = localSchemaFile.toString.replace(schemaDir.toString(), httpsEasySchemaBase)
-  override val examples: TableFor1[String] = Table(
-    "example",
-    "dcx-dai/example2.xml",
+  override val examples: TableFor1[File] = Table("file",
+    exampleDir / "dcx-dai/example2.xml",
   )
-
-  "examples" should "reference the last schema version" in {
-    forEvery(examples) { example =>
-      // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
-      (exampleDir / example).contentAsString.contains(publicSchema) shouldBe true
-    }
-  }
 }

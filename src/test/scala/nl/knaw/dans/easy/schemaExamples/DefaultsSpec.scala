@@ -29,6 +29,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
       ("md/emd", "sdc.xsd"),
       ("md/emd", "xml.xsd"),
       ("bag/metadata/files", "files.xsd"),
+      ("bag/metadata/agreements", "agreements.xsd"),
     )
     forEvery(xsds) { (path, file) =>
       File(lastLocalXsd(path, file))
@@ -36,23 +37,18 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
     }
   }
 
-  it should "equal not qualified ddm.xsd" in {
+  "last local ddm.XSD" should "equal not qualified ddm.xsd" in {
     // an exception to the table driven tests:
     // different path for version and version-less
     File(lastLocalXsd("md", "ddm.xsd"))
       .contentAsString shouldBe (schemaDir / "md/ddm/ddm.xsd").contentAsString
   }
 
-  it should "equal not qualified agreements.xsd" in {
-    File(lastLocalXsd("bag/metadata/agreements", "agreements.xsd"))
-      .contentAsString shouldBe (schemaDir / "bag/metadata/agreements/agreements.xsd").contentAsString
-  }
-
   "SchemaSpec classes" should "test all examples" in {
     exampleDir
-      .walk()
+      .listRecursively()
       .count(!_.isDirectory) shouldBe
-      File("src/test/scala/nl/knaw/dans/easy/schemaExamples").walk().collect {
+      File("src/test/scala/nl/knaw/dans/easy/schemaExamples").listRecursively().collect {
         case f: File if f.name.endsWith("SchemaSpec.scala") => countTestedFiles(f)
       }.sum
   }
@@ -60,6 +56,6 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
   private def countTestedFiles(file: File) = {
     file.contentAsString
       .split("\n")
-      .count(_.contains(""".xml","""))
+      .count(_.endsWith(""".xml","""))
   }
 }
