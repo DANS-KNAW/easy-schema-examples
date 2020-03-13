@@ -15,9 +15,14 @@
  */
 package nl.knaw.dans.easy.schemaExamples
 
-import java.net.{ URL, UnknownHostException }
+import java.net.UnknownHostException
 
+<<<<<<< HEAD
 import better.files.{ File, StringExtensions }
+=======
+import better.files.File.currentWorkingDirectory
+import better.files.{ File, StringOps }
+>>>>>>> blessed/master
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
@@ -30,20 +35,17 @@ import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
 trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
+  lazy val testDir: File = currentWorkingDirectory / "target" / "test" / getClass.getSimpleName
 
   val publicSchema: String
   val localSchemaFile: String
-  val examples: TableFor1[String]
+  val examples: TableFor1[File]
+  private lazy val primaryExamples: TableFor1[File] = examples.filterNot(_.isChildOf(testDir))
 
   private val publicEasySchemaBase = "//easy.dans.knaw.nl/schemas"
   protected val httpsEasySchemaBase = s"https:$publicEasySchemaBase"
 
-  private lazy val triedPublicSchema: Try[Schema] = Try {
-    SchemaFactory
-      .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-      .newSchema(Array[Source](new StreamSource(publicSchema.toString)))
-  }
-  private lazy val triedLocalSchema: Try[Schema] = Try {
+  lazy val triedLocalSchema: Try[Schema] = Try {
     // lazy for two reasons:
     // - schemaFile is set by concrete test class
     // - postpone loading until actually validating
@@ -58,33 +60,25 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
 
   "examples" should "be schema valid with local copy of easy-schema" in {
     forEvery(examples) { example =>
-      val xml = XML.loadFile((exampleDir / example).toString())
-      every(easyLocationsIn(xml)) should exist
-      assume(schemaIsOnline(triedLocalSchema)) // inside the loop to not block other errors
-      validate(triedLocalSchema, toLocalSchemas(xml)) shouldBe a[Success[_]]
+      val xml = XML.loadFile(example.toString())
+      validate(toLocalSchemas(xml)) shouldBe a[Success[_]]
     }
   }
 
-  it should "be schema valid with (unqualified) public schema" in {
-    // sub-schemas may not have an unqualified public schema
-    assume(schemaIsOnline(triedPublicSchema)) // outside the loop as we are only validating
-    assume(lastLocalIsPublic)
-    forEvery(examples) { example =>
-      val xml = XML.loadFile((exampleDir / example).toString())
-      validate(triedPublicSchema, xml.toString) shouldBe a[Success[_]]
+  "primary examples" should "reference the last schema version" in {
+    // not "should include(publicSchema)" to avoid the full XML in the stack trace on failure
+    forEvery(primaryExamples)(_.contentAsString.contains(publicSchema) shouldBe true)
+  }
+
+  it should "reference existing locations" in {
+    forEvery(primaryExamples) { example =>
+      every(easyLocationsIn(XML.loadFile(example.toString))) should exist
     }
   }
 
-  private def lastLocalIsPublic: Boolean = {
-    // to ignore tests while easy-schema and easy-schema-examples are under parallel development
-    // and the new schema's are not yet published
-    // reported with: ...lastLocalIsPublic was false
-    val newPublicSchema = localSchemaFile.replace(schemaDir.toString(), httpsEasySchemaBase)
-    Try(new URL(newPublicSchema).openStream()).fold(_ => false, _ => true)
-  }
-
-  private def validate(schema: Try[Schema], xmlString: String): Try[Unit] = {
-    schema.map(_.newValidator()
+  def validate(xmlString: String): Try[Unit] = {
+    assume(referencedSchemasAreOnline(triedLocalSchema))
+    triedLocalSchema.map(_.newValidator()
       .validate(new StreamSource(xmlString.inputStream)))
       .doIfFailure {
         case e: SAXParseException => showErrorWithSourceContext(xmlString, e)
@@ -106,7 +100,7 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     } yield File(url.replace(httpsEasySchemaBase, schemaDir.toString()))
   }
 
-  private def schemaIsOnline(schema: Try[Schema]): Boolean = {
+  def referencedSchemasAreOnline(schema: Try[Schema]): Boolean = {
     // to ignore tests when executed without web-access or when third party schema's are not available
     // reported with: ...triedPublicSchema was false
     schema match {
@@ -130,12 +124,12 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     lines.withFilter(_.trim.nonEmpty).foreach(println)
   }
 
-  private def toLocalSchemas(xml: Elem) = {
+  def toLocalSchemas(xml: Elem): String = {
     xml
       .toString() // schema location attribute becomes a standardized one liner
       .replaceAll( // a leading space is supposed to be the location
-      s" $httpsEasySchemaBase", // replace public xsd location
-      s" file://$schemaDir" // with local xsd location
-    )
+        s" $httpsEasySchemaBase", // replace public xsd location
+        s" file://$schemaDir" // with local xsd location
+      )
   }
 }
