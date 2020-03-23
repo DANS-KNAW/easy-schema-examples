@@ -113,6 +113,22 @@
             </dcx-dai:author>
         </dcx-dai:contributorDetails>
         
+        <ddm:funding>
+            <ddm:funderName>EC</ddm:funderName> 
+            <ddm:funderIdentifier funderIdentifierType="Crossref Funder ID">"https://doi.org/10.13039/501100000780</ddm:funderIdentifier>
+            <ddm:funderIdentifier funderIdentifierType="ISNI">0000 0001 2170 6158</ddm:funderIdentifier>
+            <ddm:fundingProgramme>FP7</ddm:fundingProgramme>
+            <ddm:awardNumber awardURI="info:eu-repo/grantAgreement/EC/FP7/608166">608166</ddm:awardNumber>            
+            <ddm:awardTitle xml:lang="eng" acronym="RAIN">Risk Analysis of Infrastructure Networks in response to extreme weather</ddm:awardTitle>
+        </ddm:funding>
+        
+        <ddm:funding>
+            <ddm:funderName>NWO</ddm:funderName>
+            <ddm:funderIdentifier funderIdentifierType="Crossref Funder ID">http://dx.doi.org/10.13039/501100003246</ddm:funderIdentifier>
+            <ddm:fundingProgramme>Gravitation</ddm:fundingProgramme>
+            <ddm:awardNumber awardURI="info:eu-repo/grantAgreement/NWO/Gravitation/024.001.006">024.001.006</ddm:awardNumber>
+        </ddm:funding>
+        
         <!-- Use explicitely typed values, when possible -->
         <dct:issued xsi:type="dct:W3CDTF">2012-10-09</dct:issued>
         
