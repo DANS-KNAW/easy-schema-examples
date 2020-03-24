@@ -76,9 +76,10 @@ trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPro
     assume(referencedSchemasAreOnline(triedLocalSchema))
     triedLocalSchema.map(_.newValidator()
       .validate(new StreamSource(xmlString.inputStream)))
+      /*
       .doIfFailure {
         case e: SAXParseException => showErrorWithSourceContext(xmlString, e)
-      }
+      }*/
   }
 
   private def easyLocationsIn(xml: Elem): Iterable[File] = {
