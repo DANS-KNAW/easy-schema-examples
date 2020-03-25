@@ -47,7 +47,7 @@ class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks
   "SchemaSpec classes" should "test all examples" in {
     exampleDir
       .listRecursively()
-      .count(!_.isDirectory) shouldBe
+      .count(file => !file.isDirectory && file.name.endsWith(".xml")) shouldBe
       File("src/test/scala/nl/knaw/dans/easy/schemaExamples").listRecursively().collect {
         case f: File if f.name.endsWith("SchemaSpec.scala") => countTestedFiles(f)
       }.sum
