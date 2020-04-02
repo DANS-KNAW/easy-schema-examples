@@ -17,20 +17,20 @@ package nl.knaw.dans.easy.schemaExamples
 
 import java.net.UnknownHostException
 
-import better.files.{ File, StringExtensions }
 import better.files.File.currentWorkingDirectory
+import better.files.{ File, StringExtensions }
 import javax.xml.XMLConstants
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.{ Schema, SchemaFactory }
-import nl.knaw.dans.lib.error._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor1 }
-import org.scalatest.{ FlatSpec, Matchers }
 
 import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
-trait SchemaValidationFixture extends FlatSpec with Matchers with TableDrivenPropertyChecks {
+trait SchemaValidationFixture extends AnyFlatSpec with Matchers with TableDrivenPropertyChecks {
   lazy val testDir: File = currentWorkingDirectory / "target" / "test" / getClass.getSimpleName
 
   val publicSchema: String

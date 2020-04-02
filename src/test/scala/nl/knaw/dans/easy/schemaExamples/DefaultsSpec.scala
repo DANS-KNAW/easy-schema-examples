@@ -16,10 +16,11 @@
 package nl.knaw.dans.easy.schemaExamples
 
 import better.files.File
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{ FlatSpec, Matchers }
 
-class DefaultsSpec extends FlatSpec with Matchers with TableDrivenPropertyChecks {
+class DefaultsSpec extends AnyFlatSpec with Matchers with TableDrivenPropertyChecks {
   "last local XSD" should "equal not qualified XSD" in {
     val xsds = Table(
       ("path", "file"),
