@@ -2,7 +2,7 @@ Example Resources
 -----------------
 
 These example resources consist of a number of xml files that can be used
-to become more familiar with the formats used in the EASY system.
+to become more familiar with the XML formats used by the EASY services.
 The examples are organised with the same directory structure
 as de XSD files at https://easy.dans.knaw.nl/schemas/
 
@@ -21,7 +21,10 @@ https://easy.dans.knaw.nl/schemas/
 
 The [DANS bag] documentation provides best practices for [namespaces].
 Note that actual practice also uses `dct` for `dcterms`.
-The following table maps formats to files.
+The table maps formats to files.
+Examples for other XSDs may be standalone,
+or embedded within one of the files from the table.
+The root attribute `xsi:schemaLocation` defines which XSD applies.
 
 | XSD          | file in DANS V0 bag                      |
 |--------------|------------------------------------------|
@@ -32,6 +35,4 @@ The following table maps formats to files.
 [DANS bag]: https://github.com/DANS-KNAW/dans-bagit-profile/blob/master/docs/versions/0.0.0.md#dans-bagit-profile-v0
 [namespaces]: https://github.com/DANS-KNAW/dans-bagit-profile/blob/master/docs/versions/0.0.0.md#xml-namespaces
 
-Examples for other XSDs may be standalone,
-or embedded within one of the files from the table above. 
  
