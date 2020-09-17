@@ -31,6 +31,10 @@ import scala.util.{ Failure, Success, Try }
 import scala.xml._
 
 trait SchemaValidationFixture extends AnyFlatSpec with Matchers with TableDrivenPropertyChecks {
+
+  // Some (XSD) servers will deny requests if the User-Agent is set to the default value for Java
+  //System.setProperty("http.agent", "Test")
+
   lazy val testDir: File = currentWorkingDirectory / "target" / "test" / getClass.getSimpleName
 
   val publicSchema: String
