@@ -22,7 +22,7 @@
     xmlns:dct="http://purl.org/dc/terms/"
     xmlns:dcx-dai="http://easy.dans.knaw.nl/schemas/dcx/dai/"
     xsi:schemaLocation="
-        http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
+    http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
         http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd
     ">
     
@@ -41,9 +41,8 @@
         The use of xml:lang and xsi:type attributes, where applicable, is recommended.
         -->
         
-        <!-- One or more dc:title, dct:title, dct:alternative -->
+        <!-- Exactly one dc:title -->
         <dc:title xml:lang="en">Title of the dataset</dc:title>
-        <dc:title xml:lang="nl">Titel van de dataset</dc:title>
         
         <!-- One or more dc:description, dct:description, dct:abstract, dct:tableOfContents -->
         <dc:description xml:lang="la">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dc:description>
@@ -128,6 +127,19 @@
             <ddm:fundingProgramme>Gravitation</ddm:fundingProgramme>
             <ddm:awardNumber awardURI="info:eu-repo/grantAgreement/NWO/Gravitation/024.001.006">024.001.006</ddm:awardNumber>
         </ddm:funding>
+        
+        <!-- In case of a dutch archaeological dataset, use reportNumber to record the specific report this dataset is about -->
+        <ddm:reportNumber 
+            valueURI="https://data.cultureelerfgoed.nl/term/id/abr/relevant-value-URI" 
+            schemeURI="https://data.cultureelerfgoed.nl/term/id/abr/7a99aaba-c1e7-49a4-9dd8-d295dbcc870e" 
+            subjectScheme="ABR Rapporten"
+            reportNo="123">Report Series 123</ddm:reportNumber>
+        
+        
+        <ddm:acquisitionMethod 
+            subjectScheme="ABR verwervingswijzen" 
+            schemeURI="https://data.cultureelerfgoed.nl/term/id/abr/554ca1ec-3ed8-42d3-ae4b-47bcb848b238" 
+            valueURI="https://data.cultureelerfgoed.nl/term/id/abr/relevant-value-URI">Booronderzoek</ddm:acquisitionMethod>
         
         <!-- Use explicitely typed values, when possible -->
         <dct:issued xsi:type="dct:W3CDTF">2012-10-09</dct:issued>
