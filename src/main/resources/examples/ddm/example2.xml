@@ -28,7 +28,7 @@
         xmlns:dcterms="http://purl.org/dc/terms/"
 
         xsi:schemaLocation="
-            http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
+        http://easy.dans.knaw.nl/schemas/md/ddm/ https://easy.dans.knaw.nl/schemas/md/ddm/ddm.xsd
             http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd
         ">
 
@@ -51,9 +51,8 @@
         The use of xml:lang and xsi:type attributes, where applicable, is recommended.
         -->
 
-        <!-- One or more dc:title, dct:title, dct:alternative -->
-        <dc:title xml:lang="en">Title of the dataset 6</dc:title>
-        <dc:title xml:lang="nl">Titel van de dataset</dc:title>
+        <!-- One dc:title / dct:title -->
+        <dct:title xml:lang="en">Title of the dataset 6</dct:title>
 
         <!-- One or more dc:description, dct:description, dct:abstract, dct:tableOfContents -->
         <dc:description xml:lang="la">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dc:description>
@@ -94,6 +93,7 @@
 
     <!-- DDM instances MAY have one ddm:dcmiMetadata element -->
     <ddm:dcmiMetadata>
+        <dc:title>optionally another title</dc:title>
         <dcterms:audience xsi:type='narcis:DisciplineType'>D24000</dcterms:audience>
 
         <!-- Sword-V1 returns HTTP/1.1 500 Internal Server Error with the following fields -->
