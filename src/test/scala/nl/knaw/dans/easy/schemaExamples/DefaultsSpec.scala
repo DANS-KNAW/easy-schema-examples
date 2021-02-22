@@ -29,6 +29,8 @@ class DefaultsSpec extends AnyFlatSpec with Matchers with TableDrivenPropertyChe
       ("md/emd", "qdc.xsd"),
       ("md/emd", "sdc.xsd"),
       ("md/emd", "xml.xsd"),
+      ("bag/metadata/afm", "afm.xsd"),
+      ("bag/metadata/amd", "amd.xsd"),
       ("bag/metadata/files", "files.xsd"),
       ("bag/metadata/agreements", "agreements.xsd"),
     )
