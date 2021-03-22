@@ -143,7 +143,9 @@
         
         <!-- Use explicitely typed values, when possible -->
         <dct:issued xsi:type="dct:W3CDTF">2012-10-09</dct:issued>
-        
+        <dct:date xsi:type="id-type:RKMS-ISO8601">2012-10/2014-10</dct:date>
+        <ddm:datesOfCollection>2012-10-1/2012-11-21</ddm:datesOfCollection>
+ 
         <!-- Repeat elements that have independent meaning -->
         <dc:subject>school leavers</dc:subject>
         <dc:subject>labour market</dc:subject>
