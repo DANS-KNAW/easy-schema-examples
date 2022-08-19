@@ -34,7 +34,7 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
-        <easy.schema.version>3.4.10</easy.schema.version>
+        <easy.schema.version>3.5.9-SNAPSHOT</easy.schema.version>
     </properties>
 
     <scm>
