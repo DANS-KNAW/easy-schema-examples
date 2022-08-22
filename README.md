@@ -12,12 +12,12 @@ Development cycle
 * Run `mvn clean install` in `easy-schema`.
 * Update `<easy.schema.version>` to the SNAPSHOT version of `easy-schema` in `easy-schema-examples.pom`.
 * Run `mvn clean generate-test-resources` in this project. 
-* The fixture replaces the references to dans.knaw to local file, but not recursively.
+* The fixture replaces the references to dans.knaw to local files, but not recursively.
   When changes are made to the files under `easy-schema/src/main/resources/extern`
   apply the following replacements to the files under `easy/easy-schema-examples/target/easy-schema`
 
-      schemaLocation="https://easy.dans.knaw.nl/schemas
-      schemaLocation="file:///<HOME>/git/service/easy/easy-schema-examples/target/easy-schema
+      schemaLocation="file:///Users/jokep/git/service/easy/easy-schema-examples/target/easy-schema
+      schemaLocation="file:///<ABSOLUTE-PATH-TO>/easy-schema-examples/target/easy-schema
 
 * Update the examples and fix failing tests.
 * ~~Some tests will be ignored because of `assume(lastLocalIsPublic)`, reported with `...lastLocalIsPublic was false` messages.~~
