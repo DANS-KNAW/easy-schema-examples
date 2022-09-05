@@ -16,7 +16,7 @@ Development cycle
   When changes are made to the files under `easy-schema/src/main/resources/extern`
   apply the following replacements to the files under `easy/easy-schema-examples/target/easy-schema`
 
-      schemaLocation="file:///Users/jokep/git/service/easy/easy-schema-examples/target/easy-schema
+      schemaLocation="https://easy.dans.knaw.nl/schemas
       schemaLocation="file:///<ABSOLUTE-PATH-TO>/easy-schema-examples/target/easy-schema
 
 * Update the examples with an explicit schema version and fix failing tests.
