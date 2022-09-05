@@ -19,8 +19,6 @@ Development cycle
       schemaLocation="file:///Users/jokep/git/service/easy/easy-schema-examples/target/easy-schema
       schemaLocation="file:///<ABSOLUTE-PATH-TO>/easy-schema-examples/target/easy-schema
 
-* Update the examples and fix failing tests.
-* ~~Some tests will be ignored because of `assume(lastLocalIsPublic)`, reported with `...lastLocalIsPublic was false` messages.~~
-  Seems explicitly [requested](https://github.com/DANS-KNAW/easy-schema-examples/pull/1/files#r265880649) but is dropped in the next PR
+* Update the examples with an explicit schema version and fix failing tests.
 * Merge both projects, publish schema's.
 * The test ignored above should now succeed.
