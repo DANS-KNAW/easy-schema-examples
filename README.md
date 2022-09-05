@@ -12,13 +12,14 @@ Development cycle
 * Run `mvn clean install` in `easy-schema`.
 * Update `<easy.schema.version>` to the SNAPSHOT version of `easy-schema` in `easy-schema-examples.pom`.
 * Run `mvn clean generate-test-resources` in this project. 
-* The fixture replaces the references to dans.knaw to local files, but not recursively.
-  When changes are made to the files under `easy-schema/src/main/resources/extern`
-  apply the following replacements to the files under `easy/easy-schema-examples/target/easy-schema`
+* The fixture replaces the references to dans.knaw when reading the examples, the XSDs are not affected.
+  Apply the following replacements to the files under `easy/easy-schema-examples/target/easy-schema`
 
       schemaLocation="https://easy.dans.knaw.nl/schemas
       schemaLocation="file:///<ABSOLUTE-PATH-TO>/easy-schema-examples/target/easy-schema
 
-* Update the examples with an explicit schema version and fix failing tests.
+* Run `mvn clean install` in this project.
+* Fix failing tests, e.g. `"primary examples" should "reference the last schema version"`
+  means: update the version number in `xsi:schemaLocation` of the failing example.
 * Merge both projects, publish schema's.
 * The test ignored above should now succeed.
